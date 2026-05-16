@@ -213,13 +213,15 @@ export async function spawnVerifierChild(opts: SpawnOpts): Promise<SpawnResult> 
  *   Tmux's command becomes simply `bash <wrapper>`. All the bulk lives in
  *   the file — env exports, system-prompt-from-tempfile, the pi invocation.
  *
- * Why every env var, not a curated subset: the verifier behaves exactly like
- * the builder for LLM/tool resolution. Any API key, locale, PATH addition,
- * or feature flag the user sets at the shell level needs to reach the
- * verifier. Filtering risks silently dropping something the verifier needs.
+ * Why a curated env subset: wrapper files live under `/tmp`, so they must not
+ * contain credentials. The child only needs shell/runtime basics (`PATH`,
+ * `HOME`, locale, XDG, Node/NVM/Bun, and Pi flags). Project secrets, when
+ * genuinely needed, are loaded by the child from the project `.env` at runtime
+ * instead of being copied into the wrapper.
  *
- * Excluded keys: process-tied (`_`, `OLDPWD`, `PWD` — `-c` covers cwd) and
- * `TMUX*` (so the new session doesn't think it's nested in the parent tmux).
+ * Excluded keys: process-tied (`_`, `OLDPWD`, `PWD`), `TMUX*`, invalid shell
+ * identifiers, and credential-shaped names (`*TOKEN*`, `*SECRET*`, `*KEY*`,
+ * `*PASSWORD*`, OAuth/auth/cookie/webhook/client-secret markers).
  */
 interface BuildSpawnWrapperOpts {
   env: NodeJS.ProcessEnv;
@@ -248,15 +250,45 @@ interface BuildSpawnWrapperOpts {
   stderrLogPath: string;
 }
 
+function shouldForwardEnv(key: string): boolean {
+  // Never write credential-shaped values into the generated /tmp wrapper.
+  // The verifier can load project .env normally at runtime; the wrapper only
+  // needs enough process environment to find node/pi and share terminal basics.
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) return false;
+  if (["_", "OLDPWD", "PWD"].includes(key)) return false;
+  if (key.startsWith("TMUX")) return false;
+
+  const secretish = /(?:SECRET|TOKEN|KEY|PASSWORD|PASS|OAUTH|REFRESH|CREDENTIAL|COOKIE|AUTH|WEBHOOK|CLIENT_SECRET)/i;
+  if (secretish.test(key)) return false;
+
+  if ([
+    "HOME",
+    "USER",
+    "USERNAME",
+    "LOGNAME",
+    "SHELL",
+    "PATH",
+    "LANG",
+    "TERM",
+    "COLORTERM",
+    "TMPDIR",
+  ].includes(key)) return true;
+
+  return (
+    key.startsWith("LC_") ||
+    key.startsWith("NVM_") ||
+    key.startsWith("NODE_") ||
+    key.startsWith("BUN_") ||
+    key.startsWith("XDG_") ||
+    key.startsWith("PI_")
+  );
+}
+
 function buildSpawnWrapper(opts: BuildSpawnWrapperOpts): string {
-  const skip = new Set(["_", "OLDPWD", "PWD"]);
   const exports: string[] = [];
   for (const [k, v] of Object.entries(opts.env)) {
     if (v === undefined) continue;
-    if (skip.has(k)) continue;
-    if (k.startsWith("TMUX")) continue; // don't leak parent tmux state
-    // Skip identifiers shells can't validly export (e.g. with `(` or `=`).
-    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(k)) continue;
+    if (!shouldForwardEnv(k)) continue;
     exports.push(`export ${k}=${shellSingleQuote(v)}`);
   }
 

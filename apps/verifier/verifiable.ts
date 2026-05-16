@@ -25,7 +25,7 @@ import { promisify } from "node:util";
 
 const execFileP = promisify(execFile);
 
-import type { ExtensionAPI, ExtensionCommandContext, ExtensionContext } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, ExtensionCommandContext, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import {
   BuilderInputEditor,
   type ConnectionPhase as FooterConnectionPhase,
@@ -48,7 +48,7 @@ import {
 } from "./_shared/ipc.js";
 import { loadDotEnv } from "./_shared/env.js";
 import { parseVerifierPersona } from "./_shared/frontmatter.js";
-import { killVerifierChild, spawnVerifierChild } from "./_shared/launcher.js";
+import { killVerifierChild, spawnVerifierChild, type SpawnMode } from "./_shared/launcher.js";
 import { cleanup, ensureSocketDir, resolveSocketPath } from "./_shared/socket-path.js";
 
 // ─── Module-local state (closure-captured, not global) ───────────────────────
@@ -110,10 +110,27 @@ interface VerifiableState {
    * pi's actual error output (e.g. `model "moonshot/kimi-k2.6" not found`).
    */
   spawnStderrLogPath: string;
+  /** Whether the child was spawned as a real tmux session or as a sibling window. */
+  spawnMode: SpawnMode | null;
 }
 
-/** How long to wait for the verifier child's `hello` before surfacing a diagnostic. */
-const SPAWN_HELLO_TIMEOUT_MS = 3000;
+/**
+ * How long to wait for the verifier child's `hello` before surfacing a diagnostic.
+ *
+ * A cold Pi TUI + extension import routinely takes >3s on a remote Linux box
+ * over SSH/tmux, even when the child is healthy. Keep this long enough to
+ * avoid killing a verifier that is still booting, but configurable for tests
+ * and very fast local setups.
+ */
+const SPAWN_HELLO_TIMEOUT_MS = parseSpawnHelloTimeoutMs();
+
+function parseSpawnHelloTimeoutMs(): number {
+  const raw = process.env.PI_VERIFIER_SPAWN_HELLO_TIMEOUT_MS;
+  if (!raw) return 15_000;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 15_000;
+  return Math.max(1_000, Math.floor(parsed));
+}
 
 export default function verifiable(pi: ExtensionAPI): void {
   const state: VerifiableState = {
@@ -143,6 +160,7 @@ export default function verifiable(pi: ExtensionAPI): void {
     spawnTimeout: null,
     spawnWrapperPath: "",
     spawnStderrLogPath: "",
+    spawnMode: null,
   };
 
   // ─── Flag + slash command registration ────────────────────────────────
@@ -342,6 +360,15 @@ export default function verifiable(pi: ExtensionAPI): void {
   // ─── Internal: attach() — the lifecycle entry point ───────────────────
 
   async function attach(ctx: ExtensionContext | ExtensionCommandContext): Promise<void> {
+    // Pi 0.74 marks extension contexts stale after an internal session
+    // replacement/reload. Capture the few values we need synchronously before
+    // the first await so the background verifier spawn does not touch ctx
+    // later and trip the stale-context guard.
+    const cwd = ctx.cwd;
+    const builderSessionFile =
+      state.sessionFilePath ||
+      path.join(os.homedir(), ".pi/agent/sessions", `${state.sessionId}.jsonl`);
+
     if (state.attached || state.spawnInFlight) {
       safeNotify(ctx, "verifier already attached", "info");
       return;
@@ -366,7 +393,7 @@ export default function verifiable(pi: ExtensionAPI): void {
           ? agentNameRaw
           : "verifier";
       const agentPath = path.resolve(
-        ctx.cwd,
+        cwd,
         ".pi/verifier/agents",
         `${agentName}.md`,
       );
@@ -402,17 +429,10 @@ export default function verifiable(pi: ExtensionAPI): void {
         return;
       }
 
-      // Resolve the builder session file. Fall back to the conventional
-      // location if the session manager doesn't expose one (in-memory
-      // sessions, e.g. ephemeral RPC mode).
-      const sessionFile = ctx.sessionManager.getSessionFile();
-      const builderSessionFile =
-        sessionFile ?? path.join(os.homedir(), ".pi/agent/sessions", `${state.sessionId}.jsonl`);
-
       // Resolve socket paths up-front so we can stash them on state for
       // cleanup, then bind the server before launching the child so the
       // child's `hello` always lands on a listening peer.
-      const { socketPath, refPath } = resolveSocketPath(state.sessionId, ctx.cwd);
+      const { socketPath, refPath } = resolveSocketPath(state.sessionId, cwd);
       state.socketPath = socketPath;
       state.refPath = refPath;
 
@@ -427,12 +447,13 @@ export default function verifiable(pi: ExtensionAPI): void {
           sessionId: state.sessionId,
           agentPath,
           runtimeRoot,
-          cwd: ctx.cwd,
+          cwd,
           settings: undefined,
           builderSessionFile,
         });
         state.spawnWrapperPath = spawnResult.wrapperPath;
         state.spawnStderrLogPath = spawnResult.stderrLogPath;
+        state.spawnMode = spawnResult.mode;
       } catch (err) {
         const msg = (err as Error).message ?? String(err);
         safeNotify(ctx, `verifier: launcher failed: ${msg}`, "error");
@@ -753,13 +774,7 @@ export default function verifiable(pi: ExtensionAPI): void {
    */
   async function diagnoseSpawnFailure(ctx: ExtensionContext): Promise<void> {
     const tmuxSession = `verifier-${state.sessionId}`;
-    let alive = false;
-    try {
-      await execFileP("tmux", ["has-session", "-t", tmuxSession]);
-      alive = true;
-    } catch {
-      alive = false;
-    }
+    const alive = await verifierTmuxTargetAlive(tmuxSession, state.spawnMode);
 
     const stderrTail = await readStderrTail(state.spawnStderrLogPath);
 
@@ -768,16 +783,18 @@ export default function verifiable(pi: ExtensionAPI): void {
       sections.push(
         `Verifier did not connect within ${SPAWN_HELLO_TIMEOUT_MS / 1000}s.`,
         ``,
-        `The tmux session \`${tmuxSession}\` is still alive — pi is running`,
+        `The tmux ${state.spawnMode === "in-tmux" ? "window" : "session"} \`${tmuxSession}\` is still alive — pi is running`,
         `but never reached the socket-connect path. Likely cause: the verifier`,
         `extension threw before \`net.createConnection\`, OR the socket dir`,
-        `permissions changed.`,
+        `permissions changed. If you are SSH'd into a remote server, remember`,
+        `the verifier is a tmux window on that server, not a new Mac terminal.`,
+        `Switch with: tmux select-window -t ${tmuxSession}`,
       );
     } else {
       sections.push(
         `Verifier child died before connecting.`,
         ``,
-        `The tmux session \`${tmuxSession}\` is gone — pi exited shortly`,
+        `The tmux ${state.spawnMode === "in-tmux" ? "window" : "session"} \`${tmuxSession}\` is gone — pi exited shortly`,
         `after spawn. The captured stderr below should name the cause.`,
       );
     }
@@ -806,6 +823,31 @@ export default function verifiable(pi: ExtensionAPI): void {
     await stopSocketServer().catch(() => undefined);
     // Best-effort kill of any straggler tmux session (no-op if already gone).
     void killVerifierChild(state.sessionId).catch(() => undefined);
+  }
+
+  async function verifierTmuxTargetAlive(
+    tmuxName: string,
+    mode: SpawnMode | null,
+  ): Promise<boolean> {
+    try {
+      if (mode === "in-tmux") {
+        const { stdout } = await execFileP("tmux", [
+          "list-windows",
+          "-a",
+          "-F",
+          "#{window_name}",
+        ]);
+        return stdout
+          .split("\n")
+          .map((line) => line.trim())
+          .includes(tmuxName);
+      }
+
+      await execFileP("tmux", ["has-session", "-t", tmuxName]);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -1017,7 +1059,7 @@ export default function verifiable(pi: ExtensionAPI): void {
    * important than the channel.
    */
   function safeNotify(
-    ctx: ExtensionContext,
+    ctx: ExtensionContext | ExtensionCommandContext,
     message: string,
     level: "info" | "warning" | "error",
   ): void {
@@ -1062,7 +1104,7 @@ export default function verifiable(pi: ExtensionAPI): void {
    * need to nudge pi explicitly.
    */
   function setFooter(
-    _ctx: ExtensionContext,
+    _ctx: ExtensionContext | ExtensionCommandContext,
     label: ConnectionPhase,
   ): void {
     state.phase = label;

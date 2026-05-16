@@ -48,9 +48,9 @@ import type {
   InputEventResult,
   SessionShutdownEvent,
   SessionStartEvent,
-} from "@mariozechner/pi-coding-agent";
-import { CustomEditor } from "@mariozechner/pi-coding-agent";
-import { Text, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
+} from "@earendil-works/pi-coding-agent";
+import { CustomEditor } from "@earendil-works/pi-coding-agent";
+import { Text, truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 import * as crypto from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -216,7 +216,7 @@ function formatPhase(phase: Phase): string {
     case "error":
       return `⚠ builder error: ${truncateAscii(state.errorDetail || "(no detail)", 40)}`;
     case "disconnected":
-      return "✗ socket dropped — exiting in 5s";
+      return "✗ socket dropped — verifier left open";
   }
 }
 
@@ -698,17 +698,10 @@ function connectToParent(pi: ExtensionAPI, ctx: ExtensionContext): void {
     if (state.shuttingDown) return;
     state.phase = "disconnected";
     requestStatusRender(ctx);
-    // Give the user a moment to see the disconnected status, then exit
-    // cleanly. If the parent is genuinely gone, the tmux window dies with
-    // us; if the user wanted to keep it, they can tmux-attach the corpse.
-    setTimeout(() => {
-      try {
-        ctx.shutdown();
-      } catch {
-        // Best-effort — fall back to process.exit so the tmux window dies.
-        process.exit(0);
-      }
-    }, 5000);
+    ctx.ui.notify(
+      "verifier: builder socket disconnected; leaving verifier open for inspection",
+      "warning",
+    );
   });
 
   // JSONL reader. Wrapped in an async IIFE so we don't unhandle-reject the
@@ -907,8 +900,9 @@ function startPingInterval(ctx: ExtensionContext): void {
     if (!state.parentConn || state.parentConn.destroyed) return;
     state.pendingPongs += 1;
     if (state.pendingPongs >= 2) {
-      // Two missed pongs → parent gone. Mark disconnected, then fall
-      // through to the close handler's 5s exit.
+      // Two missed pongs → parent gone. Mark disconnected and destroy the
+      // socket; the close handler intentionally leaves the verifier open for
+      // inspection instead of auto-closing the tmux window.
       state.phase = "disconnected";
       requestStatusRender(ctx);
       try {
