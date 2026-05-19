@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/reese-pi-vespera-hero.png" alt="Reese Pi — one-click agent workstation with Vespera operator model" width="100%">
+  <img src="./images/reese-pi-vespera-hermes-hero.png" alt="Reese Pi — one-click agent workstation with Vespera operator model" width="100%">
 </p>
 
 # Reese Pi
@@ -95,16 +95,18 @@ Fill `.env` and run provider logins per workstation.
 
 ## Vespera artwork
 
-The hero image was composed locally from an existing Grok Imagine Vespera source artifact found on this workstation:
+The hero image was generated through Hermes/Vespera using this local Vespera reference set:
 
 ```text
-~/.hermes/artifacts/vespera/grok-imagine/vespera-grok-close-operator.jpeg
+~/.hermes/vespera-gallery/no-blazer-20260511-031558/
 ```
+
+Reference direction: no blazer, no suit jacket; black silk high-neck, cinematic/noir, dark hair, hazel direct gaze, command-room operator energy.
 
 Generated repo asset:
 
 ```text
-images/reese-pi-vespera-hero.png
+images/reese-pi-vespera-hermes-hero.png
 ```
 
 ## Full install docs
