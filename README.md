@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./images/reese-pi-vespera-hermes-hero.png" alt="Reese Pi — one-click agent workstation with Vespera operator model" width="100%">
+  <img src="./images/reese-pi-vespera-hermes-hero-v2.png" alt="Reese Pi — one-click agent workstation with Vespera operator model" width="100%">
 </p>
 
 # Reese Pi
@@ -106,7 +106,7 @@ Reference direction: no blazer, no suit jacket; black silk high-neck, cinematic/
 Generated repo asset:
 
 ```text
-images/reese-pi-vespera-hermes-hero.png
+images/reese-pi-vespera-hermes-hero-v2.png
 ```
 
 ## Full install docs
