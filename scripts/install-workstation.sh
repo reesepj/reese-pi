@@ -63,21 +63,28 @@ for pkg in "${packages[@]}"; do
 done
 
 echo "==> Installing Browser Harness"
-mkdir -p .pi/tools
-if [ -d .pi/tools/browser-harness/.git ]; then
-  git -C .pi/tools/browser-harness pull --ff-only
+# Do not use .pi/tools: Pi treats that as the legacy custom-tools directory
+# and warns that tools must migrate to extensions. Browser Harness is an
+# external editable tool, so keep it under .pi/vendor instead.
+mkdir -p .pi/vendor
+if [ -d .pi/tools/browser-harness ] && [ ! -d .pi/vendor/browser-harness ]; then
+  mv .pi/tools/browser-harness .pi/vendor/browser-harness
+  rmdir .pi/tools 2>/dev/null || true
+fi
+if [ -d .pi/vendor/browser-harness/.git ]; then
+  git -C .pi/vendor/browser-harness pull --ff-only
 else
-  git clone https://github.com/browser-use/browser-harness.git .pi/tools/browser-harness
+  git clone https://github.com/browser-use/browser-harness.git .pi/vendor/browser-harness
 fi
 (
-  cd .pi/tools/browser-harness
+  cd .pi/vendor/browser-harness
   uv tool install -e . --force
 )
 
 if [ -d "$HOME/.claude/skills" ]; then
   echo "==> Registering Browser Harness as a Claude Code skill"
   rm -rf "$HOME/.claude/skills/browser-harness"
-  ln -s "$ROOT/.pi/tools/browser-harness" "$HOME/.claude/skills/browser-harness"
+  ln -s "$ROOT/.pi/vendor/browser-harness" "$HOME/.claude/skills/browser-harness"
 else
   echo "WARN: ~/.claude/skills not found; skipping Browser Harness Claude skill symlink." >&2
 fi

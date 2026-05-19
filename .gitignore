@@ -92,6 +92,7 @@ temp/
 .pi/state/
 .pi/agent-sessions/
 .pi/tools/
+.pi/vendor/
 .pi/git/*
 !.pi/git/.gitignore
 .pi/npm/*

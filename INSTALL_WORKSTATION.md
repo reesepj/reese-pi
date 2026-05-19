@@ -33,7 +33,7 @@ The installer will:
    - `npm:@juicesharp/rpiv-todo@1.9.0`
    - `npm:@llblab/pi-telegram@0.11.2`
    - `npm:@plannotator/pi-extension@0.19.18`
-3. Clone and install Browser Harness into `.pi/tools/browser-harness` with `uv tool install -e .`.
+3. Clone and install Browser Harness into `.pi/vendor/browser-harness` with `uv tool install -e .`.
 4. Symlink Browser Harness into `~/.claude/skills/browser-harness` when Claude Code skills are available.
 5. Create `.env` from `.env.sample` if needed.
 6. Install global launch wrappers into `~/.local/bin`.
