@@ -14,6 +14,18 @@ The pattern is a **top-down observer**: the builder doesn't know the verifier ex
 
 ## Quick start
 
+### One-click workstation install
+
+To reproduce this full Pi Agent setup on another workstation:
+
+```bash
+git clone https://github.com/disler/the-verifier-agent.git
+cd the-verifier-agent
+bash scripts/install-workstation.sh
+```
+
+See [INSTALL_WORKSTATION.md](./INSTALL_WORKSTATION.md) for prerequisites, pinned package versions, Browser Harness setup, Pi-to-Pi communication, and global launch commands (`pi-verifier`, `pi-coms`, `pi-coms-claude`, etc.).
+
 ### Agentic Installation
 
 Open Claude Code (or any coding agent you like) in this repo:

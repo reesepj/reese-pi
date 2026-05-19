@@ -1,4 +1,19 @@
 {
-  "skills": ["~/.claude/skills"],
-  "sessionDir": "~/.pi/agent/sessions"
+  "skills": [
+    "~/.claude/skills"
+  ],
+  "sessionDir": "~/.pi/agent/sessions",
+  "defaultProvider": "pi-claude-cli",
+  "defaultModel": "claude-sonnet-4-5",
+  "defaultThinkingLevel": "high",
+  "packages": [
+    "https://github.com/BlockedPath/pi-xai-oauth.git@8f1b4927454362d8dfa36298b4cae0199c8c2c7a",
+    "https://github.com/rchern/pi-claude-cli.git@e0c9a12ac21be4c197e82795f7207746f3183028",
+    "npm:pi-mcp-adapter@2.6.1",
+    "npm:@samfp/pi-memory@1.3.2",
+    "npm:@juicesharp/rpiv-ask-user-question@1.9.0",
+    "npm:@juicesharp/rpiv-todo@1.9.0",
+    "npm:@llblab/pi-telegram@0.11.2",
+    "npm:@plannotator/pi-extension@0.19.18"
+  ]
 }

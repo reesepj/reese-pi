@@ -88,9 +88,14 @@ tmp/
 temp/
 *.tsbuildinfo
 
-# Verifier runtime artifacts
+# Pi install/cache/runtime artifacts
 .pi/state/
 .pi/agent-sessions/
+.pi/tools/
+.pi/git/*
+!.pi/git/.gitignore
+.pi/npm/*
+!.pi/npm/.gitignore
 /tmp/pi-verifier/
 
 deep_docs/

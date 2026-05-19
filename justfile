@@ -33,3 +33,48 @@ clean:
     -rm -f /tmp/pi-verifier/*.sock
     -rm -f .pi/state/verifier-*.sock.ref
     @echo "clean: stale verifier state removed"
+
+# ------------------------ Pi-to-Pi agent communication ------------------------
+
+# Same-machine peer-to-peer messaging between Pi agents.
+# Example: just local-coms --name planner --purpose "Plans work" --color "#36F9F6"
+local-coms *args:
+    pi -e extensions/coms.ts {{args}}
+
+# Start a local coms-net HTTP/SSE hub (binds 127.0.0.1, OS-claimed port by default).
+coms-net-server:
+    -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null
+    bun scripts/coms-net-server.ts
+
+# Start a LAN-visible coms-net hub. Requires PI_COMS_NET_AUTH_TOKEN.
+coms-net-server-lan:
+    -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null
+    PI_COMS_NET_HOST=0.0.0.0 bun scripts/coms-net-server.ts
+
+# Networked Pi-to-Pi client. Auto-discovers ~/.pi/coms-net/projects/<project>/server.json.
+# Example: just coms --name dev --purpose "Dev agent"
+coms *args:
+    pi -e extensions/coms-net.ts {{args}}
+
+# Networked client pinned to the workspace default Claude provider/model.
+coms-claude *args:
+    pi -e extensions/coms-net.ts --provider pi-claude-cli --model claude-sonnet-4-5 {{args}}
+
+# ------------------------ Browser Harness web tool ------------------------
+
+# Launch an isolated Chrome profile with CDP enabled for browser-harness.
+browser-harness-chrome:
+    mkdir -p "$HOME/.cache/browser-harness/chrome-profile"
+    google-chrome --remote-debugging-port=9222 --user-data-dir="$HOME/.cache/browser-harness/chrome-profile" --no-first-run --no-default-browser-check about:blank
+
+# Check browser-harness installation and browser connection.
+browser-harness-doctor:
+    browser-harness --doctor
+
+# Smoke-test browser-harness by opening example.com and printing page info.
+browser-harness-smoke:
+    browser-harness <<'PY'
+    new_tab("https://example.com")
+    wait_for_load()
+    print(page_info())
+    PY
