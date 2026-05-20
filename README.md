@@ -81,34 +81,3 @@ pi-verifier
 
 The builder runs in your terminal. A verifier agent runs in a sibling tmux/window and watches the builder session JSONL. When the verifier finds a failed claim, it sends corrective feedback back into the builder as a follow-up turn.
 
-## What is intentionally not replicated
-
-For safety, the installer does **not** copy secrets or account state:
-
-- `.env` API keys
-- Claude Code login/session state
-- xAI OAuth tokens
-- Telegram bot tokens
-- browser cookies/profiles
-
-Fill `.env` and run provider logins per workstation.
-
-## Vespera artwork
-
-The hero image was generated through Hermes/Vespera using this local Vespera reference set:
-
-```text
-~/.hermes/vespera-gallery/no-blazer-20260511-031558/
-```
-
-Reference direction: no blazer, no suit jacket; black silk high-neck, cinematic/noir, dark hair, hazel direct gaze, command-room operator energy.
-
-Generated repo asset:
-
-```text
-images/reese-pi-vespera-hermes-hero-v2.png
-```
-
-## Full install docs
-
-See [`INSTALL_WORKSTATION.md`](./INSTALL_WORKSTATION.md) for details, pinned versions, and troubleshooting notes.
