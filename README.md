@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="./images/reese-pi-vespera-hermes-hero-v2.png" alt="Reese Pi — one-click agent workstation with Vespera operator model" width="100%">
-</p>
 
 # Reese Pi
 
