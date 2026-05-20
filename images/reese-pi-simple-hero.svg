@@ -1,0 +1,13 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple basic dark background -->
+  <rect width="1200" height="400" fill="#0a0a0a"/>
+  
+  <!-- Minimal accent line -->
+  <rect x="100" y="180" width="1000" height="2" fill="#333"/>
+  
+  <!-- Clean text -->
+  <text x="600" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="72" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="600">Reese Pi</text>
+  
+  <!-- Subtle tagline -->
+  <text x="600" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666" text-anchor="middle">Agent Workstation</text>
+</svg>

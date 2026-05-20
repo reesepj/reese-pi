@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="./images/reese-pi-simple-hero.svg" alt="Reese Pi — agent workstation" width="100%">
+</p>
 
 # Reese Pi
 
