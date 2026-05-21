@@ -1,6 +1,5 @@
 {
   "schema": "reese-pi.workstation-sync.v1",
-  "generatedAt": "2026-05-21T22:14:50.986519+00:00",
   "piCli": {
     "currentVersion": null,
     "latestNpmVersion": "0.75.4",
@@ -64,8 +63,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3155,
-      "sha256": "3697022fcfc6c2bb80eb1ab4afdd1e21ba970d88d9556e32104ed181b575734e"
+      "bytes": 2327,
+      "sha256": "ffd27b845673f6e9e2abfe05846553306a349fc4825234b6325d38157227efcb"
     },
     {
       "path": "REMOTE_OPS_GUIDE.md",
@@ -149,8 +148,8 @@
     },
     {
       "path": "scripts/sync-workstation-pi.sh",
-      "bytes": 3962,
-      "sha256": "beaf03bf58871b1373eef14b30cdfcbb5ab7bb4bf6c256a4f689a8b43a80b0a5"
+      "bytes": 4390,
+      "sha256": "ac3faea62332744d9558556a77f05bb1e279511094596a771edc882aeeaaf31c"
     }
   ],
   "safety": {

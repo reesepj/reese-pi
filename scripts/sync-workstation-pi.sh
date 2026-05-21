@@ -87,7 +87,6 @@ except Exception:
 
 manifest = {
     'schema': 'reese-pi.workstation-sync.v1',
-    'generatedAt': datetime.now(timezone.utc).isoformat(),
     'piCli': {
         'currentVersion': current or None,
         'latestNpmVersion': latest or None,
@@ -101,7 +100,22 @@ manifest = {
         'requiredGate': 'gitleaks protect --staged --redact',
     },
 }
-out.write_text(json.dumps(manifest, indent=2) + '\n')
+
+# Keep the manifest stable when nothing meaningful changed so the cron does not
+# create timestamp-only commits. The commit time already records sync time.
+new_text = json.dumps(manifest, indent=2) + '\n'
+if out.exists():
+    old_text = out.read_text()
+    try:
+        old_obj = json.loads(old_text)
+        old_obj.pop('generatedAt', None)  # tolerate the older manifest shape
+        if old_obj == manifest:
+            raise SystemExit(0)
+    except SystemExit:
+        raise
+    except Exception:
+        pass
+out.write_text(new_text)
 PY
 
 # Stage only public-safe workstation/Pi reproducibility files.
