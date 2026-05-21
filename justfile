@@ -41,6 +41,16 @@ clean:
 local-coms *args:
     pi -e extensions/coms.ts {{args}}
 
+# Personal Ops Agent — Telegram remote prompt channel + intelligent inbox
+# Launch this to make your phone Telegram DM a full remote control surface for this workstation.
+# Send any prompt from phone; agent classifies, tracks with todo/memory, replies with proof.
+# Example: just personal-ops
+personal-ops:
+    pi -e extensions/personal-ops.ts --verifiable
+
+# Shortcut
+ops: personal-ops
+
 # Start a local coms-net HTTP/SSE hub (binds 127.0.0.1, OS-claimed port by default).
 coms-net-server:
     -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null

@@ -1,0 +1,161 @@
+{
+  "schema": "reese-pi.workstation-sync.v1",
+  "generatedAt": "2026-05-21T22:14:50.986519+00:00",
+  "piCli": {
+    "currentVersion": null,
+    "latestNpmVersion": "0.75.4",
+    "upToDate": false
+  },
+  "packages": [
+    "https://github.com/BlockedPath/pi-xai-oauth.git@8f1b4927454362d8dfa36298b4cae0199c8c2c7a",
+    "https://github.com/rchern/pi-claude-cli.git@e0c9a12ac21be4c197e82795f7207746f3183028",
+    "npm:pi-mcp-adapter@2.6.1",
+    "npm:@samfp/pi-memory@1.3.2",
+    "npm:@juicesharp/rpiv-ask-user-question@1.9.0",
+    "npm:@juicesharp/rpiv-todo@1.9.0",
+    "npm:@llblab/pi-telegram@0.11.2",
+    "npm:@plannotator/pi-extension@0.19.18"
+  ],
+  "trackedWorkstationFiles": [
+    {
+      "path": ".pi/prompts/brief.md",
+      "bytes": 594,
+      "sha256": "46ab53abfeb091924bd0ccda0f05ac07e1ec3e847e9dc323b6c9a04d6a051e77"
+    },
+    {
+      "path": ".pi/prompts/capture.md",
+      "bytes": 752,
+      "sha256": "eeb40229ecf2765ceb050cb8d3b9d6f1eb82927fa4cfd5c879215b1ca25aeec7"
+    },
+    {
+      "path": ".pi/prompts/daily-brief.md",
+      "bytes": 917,
+      "sha256": "018e1d66b0ffc8efd9a25817dc7cb2316f9ea869d71e912af6fc35fe43e96e5d"
+    },
+    {
+      "path": ".pi/prompts/handoff.md",
+      "bytes": 731,
+      "sha256": "7cc1d7b11cfac0cb79305c3ed8aa297ebac682dea2f9b25891d48e50d552b58b"
+    },
+    {
+      "path": ".pi/prompts/plan.md",
+      "bytes": 884,
+      "sha256": "a623dbf86ceb8f123d911e2eb5a5fd61280d4f014681e243e2dfac1cca10360f"
+    },
+    {
+      "path": ".pi/prompts/remember.md",
+      "bytes": 473,
+      "sha256": "cf8847440be649f0075231d24082865bd8405e165ebea3e2dd754c84df7eb21b"
+    },
+    {
+      "path": ".pi/settings.json",
+      "bytes": 643,
+      "sha256": "5cf469ad8dabc93361110b538e62ef18bcbd21f2c04d104ad1d3743a7f4931de"
+    },
+    {
+      "path": ".pi/skills/grill-me/SKILL.md",
+      "bytes": 728,
+      "sha256": "f610bc56c34a2bef9233c5e7e8ac8f344dd7cf4c3d06f658b4feeaad87e2c298"
+    },
+    {
+      "path": "INSTALL_WORKSTATION.md",
+      "bytes": 2421,
+      "sha256": "ddfaf101ba62bb4fee9a86d9d4330f95f625af93321d7d3bc132f57ae861461f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3155,
+      "sha256": "3697022fcfc6c2bb80eb1ab4afdd1e21ba970d88d9556e32104ed181b575734e"
+    },
+    {
+      "path": "REMOTE_OPS_GUIDE.md",
+      "bytes": 2651,
+      "sha256": "ab63224e2e42b291cf67b02ec7470698dcaade72d9632504d807531feac94fd7"
+    },
+    {
+      "path": "REMOTE_OPS_TEST_PLAN.md",
+      "bytes": 2560,
+      "sha256": "03d64866121302fa196f77fa9af3c934e4c160199a795e211ea54de8c93919ae"
+    },
+    {
+      "path": "extensions/coms-net.ts",
+      "bytes": 56198,
+      "sha256": "8f598fa3b07508a113af2d9f5af49c3d2e0831c06f200207352cb0a2256115a9"
+    },
+    {
+      "path": "extensions/coms.ts",
+      "bytes": 51170,
+      "sha256": "2f505fdf11c7baccc15aedbc9f0f9f1a97be4b1df3acaf326afea8cee43849b2"
+    },
+    {
+      "path": "extensions/personal-ops.ts",
+      "bytes": 8421,
+      "sha256": "649896ec994db9f9bbea33ccf2bdffc4885861ddbdc67ca91890fd0b7f7ed78d"
+    },
+    {
+      "path": "extensions/themeMap.ts",
+      "bytes": 6388,
+      "sha256": "827dfc100c7ce666d650b31542e03c047deee6543a2979f071ddc78d4531cd8b"
+    },
+    {
+      "path": "justfile",
+      "bytes": 3479,
+      "sha256": "8fee403304b163362647e87dd97e473b47e25e10362539b6da8767746f9f7d21"
+    },
+    {
+      "path": "pi-extension-cheat-sheet.html",
+      "bytes": 30514,
+      "sha256": "9ad1866afd3719c3d440928907ce829655baeb93247465ce64be5e111904cd57"
+    },
+    {
+      "path": "scripts/bin/pi-browser-harness-chrome",
+      "bytes": 180,
+      "sha256": "eea2dd292f71204695d727e7bcb0b829e775c4e4bb9bdd993d0dc83d6c7c09e7"
+    },
+    {
+      "path": "scripts/bin/pi-coms",
+      "bytes": 162,
+      "sha256": "614812f6daa8b6ea8c5cc082eae7b20bde619ef2d3a104e9898e6a3bda8a319b"
+    },
+    {
+      "path": "scripts/bin/pi-coms-claude",
+      "bytes": 169,
+      "sha256": "5ee23a971983a9f9b63fbbf5a7f1115881d8ee72ad25fb4a99148d9d94f0de91"
+    },
+    {
+      "path": "scripts/bin/pi-coms-net-server",
+      "bytes": 173,
+      "sha256": "af4e1f5ee744c22be8656233b6b4502213cc416ce760b4c633d7a05988cced6c"
+    },
+    {
+      "path": "scripts/bin/pi-local-coms",
+      "bytes": 168,
+      "sha256": "5641e5cde7cb8bccf35b29b89f632cc554c0bdbb8b79c623126e2a0ac994e718"
+    },
+    {
+      "path": "scripts/bin/pi-verifier",
+      "bytes": 159,
+      "sha256": "ab2b4c03ed6bf686689d064f46f14113d847719e9fa3589f8e4044225f22ccdf"
+    },
+    {
+      "path": "scripts/coms-net-server.ts",
+      "bytes": 45678,
+      "sha256": "2369ca9a566e28e4af69f1e285f142731e719fd6f26fd456d1487b6c5ac99569"
+    },
+    {
+      "path": "scripts/install-workstation.sh",
+      "bytes": 4290,
+      "sha256": "92278e068e50a1fe328253f3c1f689197dc0dd630574e5f0f08d0e01bced2198"
+    },
+    {
+      "path": "scripts/sync-workstation-pi.sh",
+      "bytes": 3962,
+      "sha256": "beaf03bf58871b1373eef14b30cdfcbb5ab7bb4bf6c256a4f689a8b43a80b0a5"
+    }
+  ],
+  "safety": {
+    "publicRepo": true,
+    "secretPolicy": "Stage allowlisted Pi workstation files only; never stage .env, sessions, caches, runtime state, node_modules, vendor clones, or secrets.",
+    "requiredGate": "gitleaks protect --staged --redact"
+  }
+}

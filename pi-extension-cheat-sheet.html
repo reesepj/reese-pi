@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reese Pi — Extensions & Launch Wrappers Cheat Sheet</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080a0f;
+      --panel: #111621;
+      --panel-2: #151c29;
+      --ink: #edf3ff;
+      --muted: #9aa7bc;
+      --dim: #6f7b8f;
+      --line: rgba(255,255,255,.11);
+      --accent: #7cf7c8;
+      --accent-2: #6de7ff;
+      --warn: #ffd166;
+      --hot: #ff7ab6;
+      --ok: #8bf39d;
+      --radius: 18px;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(124,247,200,.14), transparent 34rem),
+        radial-gradient(circle at 80% 10%, rgba(109,231,255,.10), transparent 30rem),
+        linear-gradient(180deg, #080a0f 0%, #0b0f16 45%, #080a0f 100%);
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell { max-width: 1180px; margin: 0 auto; padding: 40px 22px 80px; }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: clamp(28px, 5vw, 58px);
+      background:
+        linear-gradient(135deg, rgba(124,247,200,.11), rgba(109,231,255,.05) 42%, rgba(255,122,182,.07)),
+        rgba(17,22,33,.82);
+      box-shadow: var(--shadow);
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -48% 45%;
+      height: 320px;
+      background: radial-gradient(circle, rgba(124,247,200,.18), transparent 65%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--accent);
+      font: 700 12px/1 var(--mono);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--accent); box-shadow: 0 0 22px var(--accent); }
+    h1 { margin: 18px 0 14px; font-size: clamp(38px, 7vw, 76px); line-height: .9; letter-spacing: -.055em; }
+    .lede { max-width: 820px; color: #c8d4e6; font-size: clamp(16px, 2vw, 21px); line-height: 1.55; }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(8,10,15,.42);
+      backdrop-filter: blur(10px);
+    }
+    .stat strong { display: block; font-size: 26px; letter-spacing: -.04em; }
+    .stat span { color: var(--muted); font-size: 12px; }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin: 20px 0 26px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(8,10,15,.82);
+      backdrop-filter: blur(16px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    .search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #0d121b;
+      color: var(--ink);
+      padding: 13px 14px;
+      font: 500 14px/1 var(--sans);
+      outline: none;
+    }
+    .search:focus { border-color: rgba(124,247,200,.55); box-shadow: 0 0 0 3px rgba(124,247,200,.12); }
+    .toc { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #cdd8ea;
+      background: rgba(255,255,255,.04);
+      font: 700 12px/1 var(--sans);
+    }
+    .pill:hover { text-decoration: none; border-color: rgba(124,247,200,.45); color: var(--ink); }
+
+    section { margin-top: 34px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: clamp(26px, 4vw, 42px); letter-spacing: -.04em; }
+    .section-note { color: var(--muted); max-width: 620px; line-height: 1.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.02)), var(--panel);
+      padding: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+    .card h3 { margin: 0 0 8px; font-size: 20px; letter-spacing: -.02em; }
+    .card p { margin: 0 0 12px; color: #bec9da; line-height: 1.48; }
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+    .tag { color: var(--accent); background: rgba(124,247,200,.08); border: 1px solid rgba(124,247,200,.2); border-radius: 999px; padding: 5px 8px; font: 700 11px/1 var(--mono); }
+    .tag.alt { color: var(--accent-2); border-color: rgba(109,231,255,.2); background: rgba(109,231,255,.08); }
+    .tag.warn { color: var(--warn); border-color: rgba(255,209,102,.22); background: rgba(255,209,102,.08); }
+
+    code, pre { font-family: var(--mono); }
+    code { color: #dffdf0; }
+    pre {
+      margin: 10px 0 0;
+      padding: 14px;
+      overflow: auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #070a0f;
+      color: #d8e7ff;
+      line-height: 1.45;
+      font-size: 12.5px;
+    }
+    .cmd {
+      position: relative;
+    }
+    .copy {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #121926;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 5px 8px;
+      font: 700 11px/1 var(--sans);
+    }
+    .copy:hover { color: var(--ink); border-color: rgba(124,247,200,.45); }
+
+    table { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 12px; text-align: left; vertical-align: top; }
+    th { color: var(--accent); font: 800 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; background: rgba(124,247,200,.055); }
+    td { color: #cad5e6; line-height: 1.42; }
+    tr:last-child td { border-bottom: 0; }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.028);
+      padding: 0;
+      overflow: hidden;
+    }
+    details + details { margin-top: 10px; }
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 16px 18px;
+      font-weight: 800;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--accent); font-family: var(--mono); }
+    details[open] summary::after { content: "–"; }
+    .details-body { padding: 0 18px 18px; color: #c6d1e2; }
+
+    .workflow { counter-reset: step; display: grid; gap: 12px; }
+    .step { position: relative; padding-left: 54px; }
+    .step::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(124,247,200,.1);
+      border: 1px solid rgba(124,247,200,.24);
+      color: var(--accent);
+      font: 900 14px/1 var(--mono);
+    }
+
+    .callout {
+      border: 1px solid rgba(255,209,102,.25);
+      border-radius: var(--radius);
+      background: rgba(255,209,102,.07);
+      padding: 16px 18px;
+      color: #f2dfad;
+      line-height: 1.5;
+    }
+
+    .hidden { display: none !important; }
+    footer { margin-top: 42px; color: var(--dim); font: 12px/1.6 var(--mono); }
+
+    @media (max-width: 860px) {
+      .hero-grid, .grid, .grid.three { grid-template-columns: 1fr; }
+      .toolbar { position: static; grid-template-columns: 1fr; }
+      .toc { justify-content: flex-start; }
+      .section-head { display: block; }
+      table { display: block; overflow-x: auto; }
+    }
+
+    @media print {
+      body { background: white; color: #111; }
+      .toolbar, .copy { display: none; }
+      .card, header, details, .callout { box-shadow: none; background: white; color: #111; border-color: #ddd; }
+      code, pre, th, td, .card p, .section-note, .details-body { color: #111; }
+      a { color: #0645ad; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="eyebrow"><span class="dot"></span> Reese Pi workstation</div>
+      <h1>Extensions & launch wrappers cheat sheet</h1>
+      <p class="lede">A fast operator reference for the Pi Agent setup in this repo: what is installed, how to start each mode, which tools/slash commands appear inside Pi, and the safe way to delegate work between agents.</p>
+      <div class="hero-grid">
+        <div class="stat"><strong>6</strong><span>global launch wrappers</span></div>
+        <div class="stat"><strong>4</strong><span>local custom extension entrypoints</span></div>
+        <div class="stat"><strong>8</strong><span>installed Pi packages</span></div>
+        <div class="stat"><strong>1</strong><span>default Claude-backed workspace</span></div>
+      </div>
+    </header>
+
+    <div class="toolbar" aria-label="Cheat sheet navigation">
+      <input id="search" class="search" type="search" placeholder="Filter cards, tools, commands, wrappers…" />
+      <nav class="toc">
+        <a class="pill" href="#use-extensions">Use extensions</a>
+        <a class="pill" href="#wrappers">Wrappers</a>
+        <a class="pill" href="#local">Local extensions</a>
+        <a class="pill" href="#packages">Packages</a>
+        <a class="pill" href="#workflows">Workflows</a>
+      </nav>
+    </div>
+
+    <section id="use-extensions" data-search="pi extension usage load reload package tools commands flags slash">
+      <div class="section-head">
+        <h2>How extensions work in Pi Agent</h2>
+        <p class="section-note">Extensions are TypeScript modules or Pi packages. They can add tools, slash commands, flags, UI widgets, providers, event hooks, and custom rendering.</p>
+      </div>
+      <div class="grid three">
+        <div class="card">
+          <h3>Load one for a run</h3>
+          <p>Use <code>-e</code> / <code>--extension</code> for local TypeScript entrypoints.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi -e ./extensions/coms.ts --name planner
+pi -e ./extensions/coms-net.ts --name dev</pre></div>
+        </div>
+        <div class="card">
+          <h3>Auto-load packages</h3>
+          <p>Packages in <code>.pi/settings.json</code> load at startup. This repo pins providers, MCP, memory, todo, Telegram, and Plannotator.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi install npm:@samfp/pi-memory
+pi install npm:pi-mcp-adapter
+/reload</pre></div>
+        </div>
+        <div class="card">
+          <h3>Hot reload local work</h3>
+          <p>Put extensions in <code>.pi/extensions/</code> or <code>~/.pi/agent/extensions/</code> for auto-discovery and <code>/reload</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>.pi/extensions/my-ext.ts
+~/.pi/agent/extensions/my-ext.ts
+/reload</pre></div>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:14px"><strong>Inside Pi:</strong> type <code>/</code> to see slash commands. Tools are normally chosen by the model; ask naturally, e.g. “use <code>coms_net_list</code> then ask planner to review this plan.” CLI flags are passed at launch, e.g. <code>--name</code>, <code>--project</code>, <code>--server-url</code>.</div>
+    </section>
+
+    <section id="wrappers" data-search="launch wrappers just commands pi-verifier pi-coms pi-local-coms browser harness">
+      <div class="section-head">
+        <h2>Launch wrappers</h2>
+        <p class="section-note">Installed into <code>~/.local/bin</code> by <code>scripts/install-workstation.sh</code>. Each wrapper runs the matching <code>justfile</code> recipe from this repo.</p>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Wrapper</th><th>Repo recipe</th><th>Use it for</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>pi-verifier</code></td><td><code>just v</code></td><td>Builder Pi + sibling read-only verifier loop.</td><td><code>pi-verifier</code></td></tr>
+            <tr><td><code>pi-local-coms</code></td><td><code>just local-coms</code></td><td>Same-machine Pi-to-Pi agents over local sockets.</td><td><code>pi-local-coms --name planner</code></td></tr>
+            <tr><td><code>pi-coms-net-server</code></td><td><code>just coms-net-server</code></td><td>HTTP/SSE hub for networked Pi-to-Pi agents.</td><td><code>pi-coms-net-server</code></td></tr>
+            <tr><td><code>pi-coms</code></td><td><code>just coms</code></td><td>Networked coms client using workspace defaults.</td><td><code>pi-coms --name dev</code></td></tr>
+            <tr><td><code>pi-coms-claude</code></td><td><code>just coms-claude</code></td><td>Networked coms client pinned to Claude CLI provider.</td><td><code>pi-coms-claude --name claude</code></td></tr>
+            <tr><td><code>pi-browser-harness-chrome</code></td><td><code>just browser-harness-chrome</code></td><td>Launch isolated Chrome with CDP for Browser Harness.</td><td><code>pi-browser-harness-chrome</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="local" data-search="local custom extensions coms net verifier cross-agent browser harness">
+      <div class="section-head">
+        <h2>Local custom extensions</h2>
+        <p class="section-note">These are the repo-owned TypeScript entrypoints and helpers you can load with <code>pi -e</code> or through wrappers.</p>
+      </div>
+      <div class="grid">
+        <article class="card" data-search="coms local peer to peer sockets coms_list coms_send coms_get coms_await /coms">
+          <h3>Same-machine coms</h3>
+          <p><code>extensions/coms.ts</code> lets multiple Pi agents on the same machine discover and message each other through per-project registries and local sockets.</p>
+          <div class="tag-row"><span class="tag">tools</span><span class="tag alt">/coms</span><span class="tag warn">local sockets</span></div>
+          <p><strong>Tools:</strong> <code>coms_list</code>, <code>coms_send</code>, <code>coms_get</code>, <code>coms_await</code></p>
+          <p><strong>Flags:</strong> <code>--name</code>, <code>--purpose</code>, <code>--project</code>, <code>--color</code>, <code>--explicit</code></p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi-local-coms --name planner --purpose "Plans work"
+pi-local-coms --name dev --purpose "Builds code"</pre></div>
+        </article>
+
+        <article class="card" data-search="coms-net network http sse hub coms_net_list coms_net_send get await /coms-net">
+          <h3>Networked coms-net</h3>
+          <p><code>extensions/coms-net.ts</code> is the HTTP/SSE successor to local coms. It uses <code>scripts/coms-net-server.ts</code> as a hub and can work across terminals or hosts.</p>
+          <div class="tag-row"><span class="tag">tools</span><span class="tag alt">/coms-net</span><span class="tag warn">HTTP/SSE</span></div>
+          <p><strong>Tools:</strong> <code>coms_net_list</code>, <code>coms_net_send</code>, <code>coms_net_get</code>, <code>coms_net_await</code></p>
+          <p><strong>Flags:</strong> <code>--name</code>, <code>--purpose</code>, <code>--project</code>, <code>--color</code>, <code>--explicit</code>, <code>--server-url</code>, <code>--auth-token</code></p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi-coms-net-server
+pi-coms --name dev
+pi-coms-claude --name claude</pre></div>
+        </article>
+
+        <article class="card" data-search="verifier agent builder child verify verifiable verifier_prompt /verify">
+          <h3>Verifier loop</h3>
+          <p><code>apps/verifier/verifiable.ts</code> runs in the builder. It spawns a read-only sibling verifier Pi that inspects claims and can send corrective prompts back.</p>
+          <div class="tag-row"><span class="tag">/verify</span><span class="tag alt">verifier_prompt</span><span class="tag warn">tmux</span></div>
+          <p><strong>Builder command:</strong> <code>/verify</code>. <strong>Builder flags:</strong> <code>--verifiable</code>, <code>--verifier-agent NAME</code>.</p>
+          <p><strong>Verifier-side tool:</strong> <code>verifier_prompt</code> delivers actionable feedback to the builder via the socket channel.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi-verifier
+# or manually:
+pi -e ./apps/verifier/verifiable.ts -e ./apps/verifier/cross-agent.ts --verifiable</pre></div>
+        </article>
+
+        <article class="card" data-search="cross agent claude gemini codex commands skills agents prime install plan-w-team">
+          <h3>Cross-agent command loader</h3>
+          <p><code>apps/verifier/cross-agent.ts</code> scans <code>.claude/</code>, <code>.gemini/</code>, <code>.codex/</code>, and <code>.pi/agents/</code> to surface familiar commands and skills inside Pi.</p>
+          <div class="tag-row"><span class="tag">commands</span><span class="tag alt">skills</span><span class="tag warn">builder only</span></div>
+          <p><strong>Current project commands:</strong> <code>/install</code>, <code>/plan-w-team</code>, <code>/prime</code>. Skills become <code>/skill:name</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi -e ./apps/verifier/cross-agent.ts
+/prime
+/plan-w-team "build the feature"</pre></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="packages" data-search="installed packages providers mcp memory todo telegram plannotator xai claude">
+      <div class="section-head">
+        <h2>Installed Pi packages</h2>
+        <p class="section-note">Pinned in <code>.pi/settings.json</code>. These load automatically when Pi starts in this workspace.</p>
+      </div>
+
+      <details open data-search="claude cli provider pi-claude-cli model sonnet opus haiku">
+        <summary>pi-claude-cli — Claude Code-backed provider</summary>
+        <div class="details-body">
+          <p>Routes Pi model calls through the Claude Code CLI. This workspace defaults to <code>defaultProvider: pi-claude-cli</code>, <code>defaultModel: claude-sonnet-4-5</code>, <code>defaultThinkingLevel: high</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>pi --provider pi-claude-cli --model claude-sonnet-4-5
+/model claude-sonnet-4-5</pre></div>
+        </div>
+      </details>
+
+      <details data-search="xai grok oauth provider web search image generate critique deep research x twitter">
+        <summary>pi-xai-oauth — Grok provider + xAI tools</summary>
+        <div class="details-body">
+          <p>Adds the <code>xai-auth</code> provider and Grok models. Also contributes xAI-native tools for search, research, image generation, critique, image analysis, and code analysis.</p>
+          <p><strong>Common tools:</strong> <code>xai_generate_text</code>, <code>xai_web_search</code>, <code>xai_x_search</code>, <code>xai_multi_agent</code>, <code>xai_deep_research</code>, <code>xai_generate_image</code>, <code>xai_analyze_image</code>, <code>xai_critique</code>, <code>xai_code_execution</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>/login xai-auth
+/model grok-4.3
+pi --model grok-4.3 "research this"</pre></div>
+        </div>
+      </details>
+
+      <details data-search="mcp adapter model context protocol proxy mcp setup auth search describe tool resources">
+        <summary>pi-mcp-adapter — lazy MCP bridge</summary>
+        <div class="details-body">
+          <p>Gives Pi access to MCP servers without injecting every MCP tool schema into context. Use the single <code>mcp</code> proxy tool to discover, describe, connect, and call MCP tools.</p>
+          <p><strong>Commands:</strong> <code>/mcp</code>, <code>/mcp setup</code>, <code>/mcp-auth SERVER</code>. <strong>Flag:</strong> <code>--mcp-config PATH</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>mcp({ search: "screenshot" })
+mcp({ tool: "chrome_devtools_take_screenshot", args: '{"format":"png"}' })
+/mcp setup</pre></div>
+        </div>
+      </details>
+
+      <details data-search="memory persistent lessons preferences memory_search remember forget stats consolidate">
+        <summary>@samfp/pi-memory — persistent memory</summary>
+        <div class="details-body">
+          <p>Learns preferences, project patterns, tool habits, and corrections. Injects relevant memory at session start.</p>
+          <p><strong>Tools:</strong> <code>memory_search</code>, <code>memory_remember</code>, <code>memory_forget</code>, <code>memory_lessons</code>, <code>memory_stats</code>. <strong>Command:</strong> <code>/memory-consolidate</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>memory_search({ query: "commit style" })
+memory_remember({ type: "fact", key: "pref.editor", value: "vim" })</pre></div>
+        </div>
+      </details>
+
+      <details data-search="todo task list overlay dependencies /todos">
+        <summary>@juicesharp/rpiv-todo — live task overlay</summary>
+        <div class="details-body">
+          <p>Adds a branch-replayed task list the model can manage during multi-step work. Tasks survive <code>/reload</code> and compaction.</p>
+          <p><strong>Tool:</strong> <code>todo</code>. <strong>Command:</strong> <code>/todos</code>. Statuses: <code>pending</code>, <code>in_progress</code>, <code>completed</code>, <code>deleted</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>todo({ action: "create", subject: "Audit wrappers" })
+todo({ action: "update", id: 1, status: "in_progress", activeForm: "auditing wrappers" })</pre></div>
+        </div>
+      </details>
+
+      <details data-search="ask user question questionnaire structured options previews">
+        <summary>@juicesharp/rpiv-ask-user-question — structured questions</summary>
+        <div class="details-body">
+          <p>Lets the model ask concise, structured clarifying questions instead of guessing. Supports multi-select and side-by-side previews.</p>
+          <p><strong>Tool:</strong> <code>ask_user_question</code>. Use when a concrete decision blocks progress.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>ask_user_question({ questions: [{
+  question: "Which path should I take?",
+  header: "Approach",
+  options: [
+    { label: "Fast", description: "Smallest safe change" },
+    { label: "Deep", description: "Broader refactor" }
+  ]
+}] })</pre></div>
+        </div>
+      </details>
+
+      <details data-search="telegram bridge bot attach voice buttons queue connect setup status">
+        <summary>@llblab/pi-telegram — Telegram bridge</summary>
+        <div class="details-body">
+          <p>Turns a Telegram DM into a session-local Pi operator console. Supports text, images, files, queues, model controls, voice policy, buttons, and outbound attachments.</p>
+          <p><strong>Pi commands:</strong> <code>/telegram-setup</code>, <code>/telegram-connect</code>, <code>/telegram-disconnect</code>, <code>/telegram-status</code>. <strong>Tool:</strong> <code>telegram_attach</code>.</p>
+          <p><strong>Telegram commands:</strong> <code>/start</code>, <code>/compact</code>, <code>/next</code>, <code>/continue</code>, <code>/abort</code>, <code>/stop</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>/telegram-setup
+/telegram-connect
+telegram_attach({ paths: ["./artifact.html"] })</pre></div>
+        </div>
+      </details>
+
+      <details data-search="plannotator planning annotation review annotate last archive ctrl alt p submit plan">
+        <summary>@plannotator/pi-extension — plan/code review UI</summary>
+        <div class="details-body">
+          <p>Provides browser-based planning, annotation, and code-review flows. Also contributes Plannotator skills.</p>
+          <p><strong>Commands:</strong> <code>/plannotator</code>, <code>/plannotator-status</code>, <code>/plannotator-review</code>, <code>/plannotator-annotate</code>, <code>/plannotator-last</code>, <code>/plannotator-archive</code>. <strong>Shortcut:</strong> <code>Ctrl+Alt+P</code>.</p>
+          <p><strong>Tool:</strong> <code>plannotator_submit_plan</code> while planning mode is active. <strong>Flag:</strong> <code>--plan</code>.</p>
+          <div class="cmd"><button class="copy">Copy</button><pre>/plannotator
+# write PLAN.md, then the agent calls:
+plannotator_submit_plan({ filePath: "PLAN.md" })</pre></div>
+        </div>
+      </details>
+    </section>
+
+    <section id="workflows" data-search="workflow examples local coms network telegram verifier browser">
+      <div class="section-head">
+        <h2>Fast workflows</h2>
+        <p class="section-note">Copyable launch patterns for the common setups.</p>
+      </div>
+      <div class="grid">
+        <div class="card workflow-card" data-search="local two pi agents talk same machine">
+          <h3>Two local agents talk</h3>
+          <div class="workflow">
+            <div class="step"><p>Open two terminals in this repo.</p></div>
+            <div class="step"><div class="cmd"><button class="copy">Copy</button><pre># Terminal A
+pi-local-coms --name planner --purpose "Plans work"
+
+# Terminal B
+pi-local-coms --name dev --purpose "Builds code"</pre></div></div>
+            <div class="step"><p>In either Pi, ask: <code>Use coms_list, then send planner a request to review this approach.</code></p></div>
+          </div>
+        </div>
+
+        <div class="card workflow-card" data-search="networked agents hub lan server auth token">
+          <h3>Networked agent pool</h3>
+          <div class="workflow">
+            <div class="step"><div class="cmd"><button class="copy">Copy</button><pre># Terminal A: hub
+pi-coms-net-server
+
+# Terminal B/C: clients
+pi-coms --name dev
+pi-coms-claude --name claude</pre></div></div>
+            <div class="step"><p>Use <code>/coms-net --server</code> to inspect hub health and <code>coms_net_list</code> to see peers.</p></div>
+            <div class="step"><p>When answering an inbound peer prompt, just answer normally. Do <em>not</em> call <code>coms_net_send</code> to reply.</p></div>
+          </div>
+        </div>
+
+        <div class="card workflow-card" data-search="verifier builder proof loop corrective prompt">
+          <h3>Proof-first builder loop</h3>
+          <div class="workflow">
+            <div class="step"><div class="cmd"><button class="copy">Copy</button><pre>pi-verifier</pre></div></div>
+            <div class="step"><p>Build normally. The sibling verifier reads the latest session slice after each turn and reports <code>verified</code>, <code>failed</code>, or <code>unsure</code>.</p></div>
+            <div class="step"><p>If needed, run <code>/verify</code> to attach manually.</p></div>
+          </div>
+        </div>
+
+        <div class="card workflow-card" data-search="browser harness chrome cdp web automate scrape test">
+          <h3>Browser Harness</h3>
+          <div class="workflow">
+            <div class="step"><div class="cmd"><button class="copy">Copy</button><pre>pi-browser-harness-chrome</pre></div></div>
+            <div class="step"><div class="cmd"><button class="copy">Copy</button><pre>browser-harness --doctor
+browser-harness <<'PY'
+new_tab("https://example.com")
+wait_for_load()
+print(page_info())
+PY</pre></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="troubleshooting" data-search="troubleshooting reload path wrappers not found tools missing">
+      <div class="section-head">
+        <h2>Troubleshooting cues</h2>
+      </div>
+      <div class="grid three">
+        <div class="card"><h3>Wrapper not found</h3><p>Ensure <code>~/.local/bin</code> is on <code>PATH</code> and rerun <code>bash scripts/install-workstation.sh</code>.</p></div>
+        <div class="card"><h3>Tool missing</h3><p>The current Pi process probably did not load that extension. Launch through the wrapper or add <code>-e ./path.ts</code>, then <code>/reload</code>.</p></div>
+        <div class="card"><h3>Coms peer missing</h3><p>Check matching <code>--project</code>, live processes, and <code>--explicit</code>. Use <code>/coms --all</code> or <code>/coms-net --all</code>.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      Source paths: <code>README.md</code>, <code>justfile</code>, <code>extensions/*.ts</code>, <code>apps/verifier/*.ts</code>, <code>.pi/settings.json</code>, installed package READMEs. Generated as a standalone local HTML file.
+    </footer>
+  </main>
+
+  <script>
+    const search = document.querySelector('#search');
+    const searchable = [...document.querySelectorAll('[data-search], .card, details')];
+
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      searchable.forEach(el => {
+        if (!q) { el.classList.remove('hidden'); return; }
+        const hay = (el.getAttribute('data-search') || '') + ' ' + el.textContent;
+        el.classList.toggle('hidden', !hay.toLowerCase().includes(q));
+      });
+    });
+
+    document.querySelectorAll('.cmd').forEach(block => {
+      const btn = block.querySelector('.copy');
+      const pre = block.querySelector('pre');
+      if (!btn || !pre) return;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pre.innerText.trim());
+          const old = btn.textContent;
+          btn.textContent = 'Copied';
+          setTimeout(() => btn.textContent = old, 900);
+        } catch {
+          btn.textContent = 'Select';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
