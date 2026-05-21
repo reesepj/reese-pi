@@ -143,8 +143,8 @@
     },
     {
       "path": "scripts/install-workstation.sh",
-      "bytes": 4290,
-      "sha256": "92278e068e50a1fe328253f3c1f689197dc0dd630574e5f0f08d0e01bced2198"
+      "bytes": 4799,
+      "sha256": "1b0ce883f1e47acf63b30902c398d8d57b92058a5e0f771d443721172b2a00cf"
     },
     {
       "path": "scripts/sync-workstation-pi.sh",
