@@ -148,8 +148,8 @@
     },
     {
       "path": "scripts/sync-workstation-pi.sh",
-      "bytes": 4388,
-      "sha256": "ada5286e14cb93fd47db6a6a4ad7aa3e9e261bd4c959d0eaeb9b8d06c242c361"
+      "bytes": 4404,
+      "sha256": "3a15d59f788b7794d3a3484b4bdcd1b2804abd5e39fa6c41670247576b0f1fcb"
     }
   ],
   "safety": {

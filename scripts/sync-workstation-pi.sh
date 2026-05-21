@@ -120,6 +120,7 @@ PY
 
 # Stage only public-safe workstation/Pi reproducibility files.
 git add \
+  .env.sample \
   .pi/settings.json \
   .pi/prompts \
   .pi/skills \
