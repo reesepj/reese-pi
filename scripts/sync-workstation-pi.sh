@@ -21,12 +21,12 @@ need python3
 
 mkdir -p "$(dirname "$MANIFEST")"
 
-CURRENT_PI_VERSION="$(pi --version 2>/dev/null | head -1 | tr -d '\r' || true)"
-LATEST_PI_VERSION="$(npm view @earendil-works/pi-coding-agent version --silent 2>/dev/null | head -1 | tr -d '\r' || true)"
+CURRENT_PI_VERSION="$(pi --version 2>/dev/null | tr -d '\r' | sed -n '1p' || true)"
+LATEST_PI_VERSION="$(npm view @earendil-works/pi-coding-agent version --silent 2>/dev/null | tr -d '\r' | sed -n '1p' || true)"
 if [[ -n "$LATEST_PI_VERSION" && "$CURRENT_PI_VERSION" != "$LATEST_PI_VERSION" ]]; then
   echo "$LOG_PREFIX updating Pi CLI: ${CURRENT_PI_VERSION:-unknown} -> $LATEST_PI_VERSION"
   npm install -g "@earendil-works/pi-coding-agent@$LATEST_PI_VERSION"
-  CURRENT_PI_VERSION="$(pi --version 2>/dev/null | head -1 | tr -d '\r' || true)"
+  CURRENT_PI_VERSION="$(pi --version 2>/dev/null | tr -d '\r' | sed -n '1p' || true)"
 fi
 
 PI_LIST="$(pi list 2>/dev/null || true)"
