@@ -1,9 +1,9 @@
 {
   "schema": "reese-pi.workstation-sync.v1",
   "piCli": {
-    "currentVersion": null,
+    "currentVersion": "0.75.4",
     "latestNpmVersion": "0.75.4",
-    "upToDate": false
+    "upToDate": true
   },
   "packages": [
     "https://github.com/BlockedPath/pi-xai-oauth.git@8f1b4927454362d8dfa36298b4cae0199c8c2c7a",
@@ -148,8 +148,8 @@
     },
     {
       "path": "scripts/sync-workstation-pi.sh",
-      "bytes": 4402,
-      "sha256": "a13e009795ecb5d8ed68cfb00b3d9aba0685d8ff94023bccc7c5d512457dfde2"
+      "bytes": 4388,
+      "sha256": "ada5286e14cb93fd47db6a6a4ad7aa3e9e261bd4c959d0eaeb9b8d06c242c361"
     }
   ],
   "safety": {
