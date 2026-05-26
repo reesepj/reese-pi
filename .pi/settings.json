@@ -15,5 +15,8 @@
     "npm:@juicesharp/rpiv-todo@1.9.0",
     "npm:@llblab/pi-telegram@0.11.2",
     "npm:@plannotator/pi-extension@0.19.18"
+  ],
+  "extensions": [
+    "../extensions/gbrain-context.ts"
   ]
 }

@@ -46,6 +46,11 @@ if ! command -v google-chrome >/dev/null 2>&1 && ! command -v chromium >/dev/nul
   echo "WARN: Chrome/Chromium not found on PATH. Browser Harness needs Chrome/Chromium." >&2
 fi
 
+echo "==> Installing workstation typecheck dependencies"
+if [ -f package.json ]; then
+  npm install
+fi
+
 echo "==> Installing verifier extension dependencies"
 if [ -f apps/verifier/package.json ]; then
   npm install --prefix apps/verifier
@@ -133,9 +138,11 @@ Next steps:
        just browser-harness-chrome
      In another terminal:
        source .env && browser-harness --doctor
-  3. Start the verifier agent:
+  3. Check workstation health:
+       just doctor
+  4. Start the verifier agent:
        just v
 
 One-line install on another workstation after this repo is on GitHub:
-  git clone https://github.com/disler/the-verifier-agent.git && cd the-verifier-agent && bash scripts/install-workstation.sh
+  git clone https://github.com/reesepj/reese-pi.git && cd reese-pi && bash scripts/install-workstation.sh
 EOF

@@ -23,10 +23,10 @@
  *      --auth-token <tok> --name planner --project default
  */
 
-import type { ExtensionAPI, ExtensionContext, Theme } from "@mariozechner/pi-coding-agent";
-import { Text } from "@mariozechner/pi-tui";
-import { truncateToWidth } from "@mariozechner/pi-tui";
-import { Type } from "@sinclair/typebox";
+import type { ExtensionAPI, ExtensionContext, Theme } from "@earendil-works/pi-coding-agent";
+import { Text } from "@earendil-works/pi-tui";
+import { truncateToWidth } from "@earendil-works/pi-tui";
+import { Type } from "typebox";
 import { applyExtensionDefaults } from "./themeMap.ts";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -1313,7 +1313,7 @@ export default function (pi: ExtensionAPI) {
 					: `coms_net_get: complete\n${typeof r.response === "string" ? r.response : JSON.stringify(r.response, null, 2)}`;
 				return {
 					content: [{ type: "text" as const, text }],
-					details: { status: "complete", response: r.response, error: r.error ?? null },
+					details: { status: r.error ? "error" : "complete", response: r.response ?? null, error: r.error ?? null },
 				};
 			}
 			// Fall back to server.
@@ -1324,12 +1324,12 @@ export default function (pi: ExtensionAPI) {
 				if (err instanceof HttpError && err.status === 404) {
 					return {
 						content: [{ type: "text" as const, text: `coms_net_get: unknown msg_id ${msg_id}` }],
-						details: { status: "error", error: "unknown msg_id" },
+						details: { status: "error", response: null, error: "unknown msg_id" },
 					};
 				}
 				return {
 					content: [{ type: "text" as const, text: `coms_net_get: error — ${safeError(err)}` }],
-					details: { status: "error", error: safeError(err) },
+					details: { status: "error", response: null, error: safeError(err) },
 				};
 			}
 			const status = resp?.status ?? "pending";
@@ -1339,12 +1339,12 @@ export default function (pi: ExtensionAPI) {
 					: `coms_net_get: ${status}\n${typeof resp.response === "string" ? resp.response : JSON.stringify(resp.response, null, 2)}`;
 				return {
 					content: [{ type: "text" as const, text }],
-					details: { status, response: resp.response, error: resp.error ?? null },
+					details: { status, response: resp.response ?? null, error: resp.error ?? null },
 				};
 			}
 			return {
 				content: [{ type: "text" as const, text: `coms_net_get: ${status}` }],
-				details: { status },
+				details: { status, response: null, error: null },
 			};
 		},
 		renderCall(args, theme) {
@@ -1390,13 +1390,13 @@ export default function (pi: ExtensionAPI) {
 				if (r.error) {
 					return {
 						content: [{ type: "text" as const, text: `coms_net_await: error — ${r.error}` }],
-						details: { error: r.error },
+						details: { response: null, error: r.error },
 					};
 				}
 				const resp = r.response;
 				return {
 					content: [{ type: "text" as const, text: typeof resp === "string" ? resp : JSON.stringify(resp, null, 2) }],
-					details: { response: resp },
+					details: { response: resp, error: null },
 				};
 			}
 
@@ -1436,13 +1436,13 @@ export default function (pi: ExtensionAPI) {
 			if ((winner as any).error) {
 				return {
 					content: [{ type: "text" as const, text: `coms_net_await: error — ${(winner as any).error}` }],
-					details: { error: (winner as any).error },
+					details: { response: null, error: (winner as any).error },
 				};
 			}
 			const resp = (winner as any).response;
 			return {
 				content: [{ type: "text" as const, text: typeof resp === "string" ? resp : JSON.stringify(resp, null, 2) }],
-				details: { response: resp },
+				details: { response: resp, error: null },
 			};
 		},
 		renderCall(args, theme) {

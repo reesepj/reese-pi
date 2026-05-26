@@ -13,11 +13,11 @@
  * Usage: pi -e extensions/coms.ts
  */
 
-import type { ExtensionAPI, ExtensionContext, Theme } from "@mariozechner/pi-coding-agent";
-import { DynamicBorder } from "@mariozechner/pi-coding-agent";
-import { Text, Container, truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@mariozechner/pi-tui";
-import type { AutocompleteItem } from "@mariozechner/pi-tui";
-import { Type } from "@sinclair/typebox";
+import type { ExtensionAPI, ExtensionContext, Theme } from "@earendil-works/pi-coding-agent";
+import { DynamicBorder } from "@earendil-works/pi-coding-agent";
+import { Text, Container, truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
+import type { AutocompleteItem } from "@earendil-works/pi-tui";
+import { Type } from "typebox";
 import { applyExtensionDefaults } from "./themeMap.ts";
 import * as net from "node:net";
 import * as fs from "node:fs";
@@ -1388,7 +1388,7 @@ export default function (pi: ExtensionAPI) {
 			if (!entry) {
 				return {
 					content: [{ type: "text" as const, text: `coms_get: unknown msg_id ${params.msg_id}` }],
-					details: { status: "error", error: "unknown msg_id" },
+					details: { status: "error", response: null, error: "unknown msg_id" },
 				};
 			}
 			if (entry.result) {
@@ -1398,12 +1398,12 @@ export default function (pi: ExtensionAPI) {
 					: `coms_get: complete\n${typeof r.response === "string" ? r.response : JSON.stringify(r.response, null, 2)}`;
 				return {
 					content: [{ type: "text" as const, text }],
-					details: { status: "complete", response: r.response, error: r.error ?? null },
+					details: { status: r.error ? "error" : "complete", response: r.response ?? null, error: r.error ?? null },
 				};
 			}
 			return {
 				content: [{ type: "text" as const, text: `coms_get: pending` }],
-				details: { status: "pending" },
+				details: { status: "pending", response: null, error: null },
 			};
 		},
 		renderCall(args, theme) {
@@ -1435,7 +1435,7 @@ export default function (pi: ExtensionAPI) {
 			if (!entry) {
 				return {
 					content: [{ type: "text" as const, text: `coms_await: unknown msg_id ${params.msg_id}` }],
-					details: { error: "unknown msg_id" },
+					details: { response: null, error: "unknown msg_id" },
 				};
 			}
 			const timeoutMs = typeof params.timeout_ms === "number" && params.timeout_ms > 0
@@ -1451,13 +1451,13 @@ export default function (pi: ExtensionAPI) {
 			if ((winner as any).error) {
 				return {
 					content: [{ type: "text" as const, text: `coms_await: error — ${(winner as any).error}` }],
-					details: { error: (winner as any).error },
+					details: { response: null, error: (winner as any).error },
 				};
 			}
 			const resp = (winner as any).response;
 			return {
 				content: [{ type: "text" as const, text: typeof resp === "string" ? resp : JSON.stringify(resp, null, 2) }],
-				details: { response: resp },
+				details: { response: resp, error: null },
 			};
 		},
 		renderCall(args, theme) {

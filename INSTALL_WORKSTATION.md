@@ -12,18 +12,19 @@ Install these first:
 - `uv`
 - `just` recommended
 - Chrome or Chromium recommended for Browser Harness
+- `gbrain` recommended for the project-local MCP brain integration
 
 ## Install
 
 ```bash
-git clone https://github.com/disler/the-verifier-agent.git
-cd the-verifier-agent
+git clone https://github.com/reesepj/reese-pi.git
+cd reese-pi
 bash scripts/install-workstation.sh
 ```
 
 The installer will:
 
-1. Install verifier extension dependencies in `apps/verifier/`.
+1. Install root workstation typecheck dependencies and verifier extension dependencies in `apps/verifier/`.
 2. Install all project Pi packages into `.pi/settings.json` / `.pi/npm` / `.pi/git`, pinned to this workstation's versions/commits:
    - `https://github.com/BlockedPath/pi-xai-oauth.git@8f1b4927454362d8dfa36298b4cae0199c8c2c7a`
    - `https://github.com/rchern/pi-claude-cli.git@e0c9a12ac21be4c197e82795f7207746f3183028`
@@ -37,6 +38,7 @@ The installer will:
 4. Symlink Browser Harness into `~/.claude/skills/browser-harness` when Claude Code skills are available.
 5. Create `.env` from `.env.sample` if needed.
 6. Install global launch wrappers into `~/.local/bin`.
+7. Auto-load `extensions/gbrain-context.ts` from `.pi/settings.json` and use `.mcp.json` to expose `gbrain serve` through `pi-mcp-adapter` when `gbrain` is installed.
 
 ## After install
 
@@ -52,7 +54,14 @@ In another terminal, verify Browser Harness:
 
 ```bash
 source .env
-browser-harness --doctor
+browser-harness --help
+browser-harness navigate --url https://example.com --headless
+```
+
+Run health checks:
+
+```bash
+just doctor
 ```
 
 Start the verifier agent:

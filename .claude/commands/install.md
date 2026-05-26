@@ -19,7 +19,7 @@ SETTINGS: `.pi/settings.json`
 ## Codebase Structure
 
 ```
-the-verifier-agent/
+reese-pi/
 ├── apps/verifier/                  # TypeScript extensions (verifiable.ts + verifier.ts + _shared/)
 │   ├── package.json
 │   └── tsconfig.json
@@ -48,7 +48,7 @@ the-verifier-agent/
 If any of these are missing, stop and instruct the user before continuing.
 
 1. Check `node`: `command -v node && node --version`. Need ≥ 20. If missing → `brew install node` (macOS) or use a Node version manager (nvm, fnm, volta).
-2. Check `pi`: `command -v pi && pi --version`. The Pi Coding Agent CLI. If missing → `npm install -g @mariozechner/pi-coding-agent` (or the user's preferred install path; consult [Pi Coding Agent docs](https://github.com/mariozechner/pi-coding-agent)).
+2. Check `pi`: `command -v pi && pi --version`. The Pi Coding Agent CLI. If missing → `npm install -g @earendil-works/pi-coding-agent` (or the user's preferred install path; consult the Pi Coding Agent docs).
 3. Check `tmux`: `command -v tmux && tmux -V`. Need 3.x+. If missing → `brew install tmux` (macOS) or `apt install tmux` (Debian/Ubuntu).
 
 Stop and report each missing critical dep separately so the user can install incrementally.
@@ -63,7 +63,7 @@ Stop and report each missing critical dep separately so the user can install inc
 
 ### Step 4 — Install TypeScript dependencies
 
-6. Run `cd apps/verifier && npm install`. This installs `@mariozechner/pi-coding-agent`, `@mariozechner/pi-tui`, `typebox`, `typescript`, `@types/node` into `apps/verifier/node_modules/`.
+6. Run `npm install` at the repo root, then `npm install --prefix apps/verifier`. This installs root extension typecheck dependencies and verifier app dependencies.
 
 ### Step 5 — Verify configuration files
 
@@ -94,7 +94,7 @@ Stop and report each missing critical dep separately so the user can install inc
 
 ### Step 7 — Final verification (no servers started)
 
-14. Run `cd apps/verifier && npx tsc --noEmit` — must exit 0. Confirms TypeScript compiles cleanly across both extensions and the shared substrate.
+14. Run `just typecheck-all` — must exit 0. Confirms repo extensions/scripts and verifier app compile cleanly.
 
 ### Step 8 — Report
 

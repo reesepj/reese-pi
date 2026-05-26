@@ -51,6 +51,14 @@ personal-ops:
 # Shortcut
 ops: personal-ops
 
+# Run workstation health checks (deps, Pi packages, typechecks, browser harness)
+doctor:
+    bash scripts/doctor.sh
+
+# Typecheck repo extensions/scripts and verifier app
+typecheck-all:
+    npm run typecheck:all
+
 # Start a local coms-net HTTP/SSE hub (binds 127.0.0.1, OS-claimed port by default).
 coms-net-server:
     -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null
@@ -77,14 +85,10 @@ browser-harness-chrome:
     mkdir -p "$HOME/.cache/browser-harness/chrome-profile"
     google-chrome --remote-debugging-port=9222 --user-data-dir="$HOME/.cache/browser-harness/chrome-profile" --no-first-run --no-default-browser-check about:blank
 
-# Check browser-harness installation and browser connection.
+# Check browser-harness installation.
 browser-harness-doctor:
-    browser-harness --doctor
+    browser-harness --help
 
-# Smoke-test browser-harness by opening example.com and printing page info.
+# Smoke-test browser-harness by opening example.com headlessly.
 browser-harness-smoke:
-    browser-harness <<'PY'
-    new_tab("https://example.com")
-    wait_for_load()
-    print(page_info())
-    PY
+    browser-harness navigate --url https://example.com --headless

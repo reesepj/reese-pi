@@ -36,7 +36,7 @@ You can also just send normal messages — the agent will classify them automati
 ## Handoff (Desktop → Telegram)
 You can run `/handoff <note>` in a normal Pi session on desktop. This saves rich context (current work, accomplishments, next actions) so you can continue seamlessly from your phone.
 
-The handoff file is marked as picked up when the agent injects the context. Current implementation uses a safe mark-used approximation because Telegram-origin detection is not available in before_agent_start.
+The handoff file is injected only on Telegram-origin turns. It is marked `injected` before the turn and `acknowledged`/`pickedUpAt` after the agent finishes, so desktop sessions do not accidentally consume phone handoffs.
 
 ## Tips
 - Keep messages reasonably short for best results

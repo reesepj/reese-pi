@@ -51,6 +51,7 @@ just coms-net-server
 just coms --name dev
 just coms-claude --name claude
 just browser-harness-chrome
+just doctor                    # run workstation health checks
 ```
 
 ## Browser Harness web tool
@@ -65,12 +66,8 @@ Then in another terminal:
 
 ```bash
 source .env
-browser-harness --doctor
-browser-harness <<'PY'
-new_tab("https://example.com")
-wait_for_load()
-print(page_info())
-PY
+browser-harness --help
+browser-harness navigate --url https://example.com --headless
 ```
 
 ## Verifier loop
@@ -80,4 +77,33 @@ pi-verifier
 ```
 
 The builder runs in your terminal. A verifier agent runs in a sibling tmux/window and watches the builder session JSONL. When the verifier finds a failed claim, it sends corrective feedback back into the builder as a follow-up turn.
+
+## Health checks
+
+```bash
+just doctor
+just typecheck-all
+```
+
+`doctor` checks required CLIs, Pi package registration, extension/script typechecks, verifier typecheck, gbrain MCP wiring, and optional Browser Harness readiness.
+
+## gbrain context + MCP
+
+This repo auto-loads `extensions/gbrain-context.ts`, which adds:
+
+```text
+/gbrain-context                 # concise operating brief
+/gbrain-context Titan strategy  # query gbrain from Pi
+gbrain_context({"mode":"brief"})
+gbrain_context({"mode":"query","query":"Titan strategy"})
+gbrain_context({"mode":"get","slug":"systems/productivity-cell/active-work-queue"})
+```
+
+The project-local `.mcp.json` also exposes `gbrain serve` to Pi through `pi-mcp-adapter` using the proxy `mcp` tool:
+
+```text
+mcp({ server: "gbrain" })
+mcp({ search: "query" })
+mcp({ tool: "gbrain_query", args: '{"question":"..."}' })
+```
 

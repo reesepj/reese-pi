@@ -4,8 +4,8 @@
  * Tools + persona for handling remote requests from phone via Telegram.
  */
 
-import { Type } from "@mariozechner/pi-ai";
-import { defineTool, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
+import { defineTool, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 // ━━ Tools ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -83,12 +83,19 @@ export default function personalOpsExtension(pi: ExtensionAPI) {
 	pi.registerTool(remoteRememberTool);
 	pi.registerTool(remoteVerifyTool);
 
+	let handoffInjectedPath: string | null = null;
+
+	function isTelegramPrompt(text: string): boolean {
+		return /(^|\n)\s*\[telegram\]/i.test(text);
+	}
+
 	// CLI /handoff command — transfer current session context to Telegram
 	pi.registerCommand("handoff", {
 		description: "Handoff current work to Telegram so you can continue from your phone",
 		handler: async (args, ctx) => {
 			const note = args.trim() || "Session handed off from desktop";
 			const handoffData = {
+				status: "pending",
 				timestamp: new Date().toISOString(),
 				cwd: process.cwd(),
 				note,
@@ -101,13 +108,13 @@ export default function personalOpsExtension(pi: ExtensionAPI) {
 						"Prompt templates created (/capture, /plan, /brief, /daily-brief, /remember, /handoff)",
 						"/plan supports dependent todos via blockedBy",
 						"Daily/periodic brief template added",
-"/handoff implemented with richer context + safe mark-used pickup",
+						"/handoff implemented with richer context + Telegram-gated pickup",
 						"Stale context bug fixed with automatic injection"
 					],
 					keyEvents: [
 						"Todo update tool had persistent issues",
 						"Handoff context improved from minimal to lecture-catch-up style",
-						"Handoff pickup marking added (safe mark-used approximation)"
+						"Handoff pickup marking added after Telegram injection"
 					],
 					knownIssues: [
 						"Todo list updates sometimes fail in current environment",
@@ -139,28 +146,29 @@ export default function personalOpsExtension(pi: ExtensionAPI) {
 	});
 
 	pi.on("before_agent_start", async (event) => {
-		// Auto-inject current handoff context if file exists
+		// Auto-inject current handoff context only for Telegram-origin turns.
+		// This prevents a normal desktop Pi prompt from accidentally consuming
+		// a handoff intended for the phone.
 		let handoffContext = "";
 		try {
 			const fs = await import("node:fs");
 			const path = await import("node:path");
 			const handoffPath = path.join(".pi", "state", "handoff.json");
-if (fs.existsSync(handoffPath)) {
+			const telegramTurn = isTelegramPrompt(event.prompt ?? "");
+			if (telegramTurn && fs.existsSync(handoffPath)) {
 				const data = JSON.parse(fs.readFileSync(handoffPath, "utf8"));
-				handoffContext = `\n\nACTIVE HANDOFF CONTEXT (Lecture Catch-up):\n- Goal: ${data.lectureCatchup?.goal || data.contextSummary || "Remote Ops"}\n- Major Accomplishments: ${(data.lectureCatchup?.majorAccomplishments || []).join(" | ")}\n- Key Events: ${(data.lectureCatchup?.keyEvents || []).join(" | ")}\n- Known Issues: ${(data.lectureCatchup?.knownIssues || []).join(" | ")}\n- Remaining Work: ${(data.lectureCatchup?.remainingWork || []).join(" | ")}\n- Current Work: ${data.currentWork || data.note}\n- From: ${data.cwd || "unknown"} at ${data.timestamp}\n\nContinue this work from Telegram.`;
+				if (!data.acknowledgedAt) {
+					handoffContext = `\n\nACTIVE HANDOFF CONTEXT (Lecture Catch-up):\n- Goal: ${data.lectureCatchup?.goal || data.contextSummary || "Remote Ops"}\n- Major Accomplishments: ${(data.lectureCatchup?.majorAccomplishments || []).join(" | ")}\n- Key Events: ${(data.lectureCatchup?.keyEvents || []).join(" | ")}\n- Known Issues: ${(data.lectureCatchup?.knownIssues || []).join(" | ")}\n- Remaining Work: ${(data.lectureCatchup?.remainingWork || []).join(" | ")}\n- Current Work: ${data.currentWork || data.note}\n- From: ${data.cwd || "unknown"} at ${data.timestamp}\n\nContinue this work from Telegram.`;
 
-				// Safe mark-used: we mark the handoff as picked up on any agent start.
-				// We cannot reliably detect Telegram origin in before_agent_start,
-				// so this is a safe approximation rather than true Telegram-gated cleanup.
-				try {
-					data.pickedUpAt = new Date().toISOString();
+					data.status = "injected";
+					data.injectedAt = new Date().toISOString();
+					data.injectedPromptPreview = String(event.prompt ?? "").slice(0, 240);
 					fs.writeFileSync(handoffPath, JSON.stringify(data, null, 2));
-				} catch (e) {
-					// ignore mark-used errors
+					handoffInjectedPath = handoffPath;
 				}
 			}
 		} catch (e) {
-			// ignore handoff read errors
+			// ignore handoff read/write errors
 		}
 
 		const remoteGuidance = `
@@ -169,8 +177,8 @@ REMOTE TELEGRAM OPS PERSONA (active when extension loaded):
 You are the Personal Ops Agent for this workstation. All [telegram] messages are remote requests from the user's phone.
 
 Handoff detection:
-- If a .pi/state/handoff.json file exists, read it and treat the note + lastPrompt as the active context to continue.
-- After successfully picking up a handoff, delete or mark the file as used.
+- On Telegram-origin turns, injected ACTIVE HANDOFF CONTEXT is the current handoff to continue.
+- After successfully picking up a handoff, it is marked acknowledged in .pi/state/handoff.json.
 
 Classification rules (use these explicitly):
 1. Task / actionable or multi-step goal → todo(create) with owner="telegram-remote". For plans, create a parent todo then child todos linked with blockedBy.
@@ -192,6 +200,25 @@ This guidance is active for the session.`;
 		return {
 			systemPrompt: `${event.systemPrompt}\n\n${remoteGuidance}${handoffContext}`,
 		};
+	});
+
+	pi.on("agent_end", async () => {
+		if (!handoffInjectedPath) return;
+		try {
+			const fs = await import("node:fs");
+			const data = JSON.parse(fs.readFileSync(handoffInjectedPath, "utf8"));
+			if (!data.acknowledgedAt) {
+				data.status = "acknowledged";
+				data.acknowledgedAt = new Date().toISOString();
+				// Backward-compatible field for docs/scripts that still check pickedUpAt.
+				data.pickedUpAt = data.acknowledgedAt;
+				fs.writeFileSync(handoffInjectedPath, JSON.stringify(data, null, 2));
+			}
+		} catch (e) {
+			// ignore handoff acknowledgement errors
+		} finally {
+			handoffInjectedPath = null;
+		}
 	});
 
 	console.log("✅ personal-ops extension loaded — remote ops tools + persona active");
