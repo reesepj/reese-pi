@@ -59,22 +59,35 @@ doctor:
 typecheck-all:
     npm run typecheck:all
 
-# Start a local coms-net HTTP/SSE hub (binds 127.0.0.1, OS-claimed port by default).
-coms-net-server:
+# Start a local Pi-to-Pi hub (short form: `just hub`).
+hub:
     -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null
     bun scripts/coms-net-server.ts
 
-# Start a LAN-visible coms-net hub. Requires PI_COMS_NET_AUTH_TOKEN.
-coms-net-server-lan:
+# Start a LAN-visible Pi-to-Pi hub. Requires PI_COMS_NET_AUTH_TOKEN.
+hub-lan:
     -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null
     PI_COMS_NET_HOST=0.0.0.0 bun scripts/coms-net-server.ts
 
+# Backward-compatible hub names.
+coms-net-server: hub
+coms-net-server-lan: hub-lan
+
 # Networked Pi-to-Pi client. Auto-discovers ~/.pi/coms-net/projects/<project>/server.json.
-# Example: just coms --name dev --purpose "Dev agent"
+# Short form: `just client dev` instead of `just coms --name dev`.
+client name="dev" *args:
+    pi -e extensions/coms-net.ts --name "{{name}}" {{args}}
+
+# Backward-compatible raw networked client.
 coms *args:
     pi -e extensions/coms-net.ts {{args}}
 
 # Networked client pinned to the workspace default Claude provider/model.
+# Short form: `just client-claude claude`.
+client-claude name="claude" *args:
+    pi -e extensions/coms-net.ts --provider pi-claude-cli --model claude-sonnet-4-5 --name "{{name}}" {{args}}
+
+# Backward-compatible Claude client.
 coms-claude *args:
     pi -e extensions/coms-net.ts --provider pi-claude-cli --model claude-sonnet-4-5 {{args}}
 

@@ -78,10 +78,12 @@ Launch commands replicated by the installer:
 | --- | --- |
 | `pi-verifier` | `just v` |
 | `pi-local-coms --name planner` | `just local-coms --name planner` |
-| `pi-coms-net-server` | `just coms-net-server` |
-| `pi-coms --name dev` | `just coms --name dev` |
-| `pi-coms-claude --name claude` | `just coms-claude --name claude` |
+| `pi-hub` | `just hub` |
+| `pi-client dev` | `just client dev` |
+| `pi-client-claude claude` | `just client-claude claude` |
 | `pi-browser-harness-chrome` | `just browser-harness-chrome` |
+
+Old commands still work: `pi-coms-net-server`, `pi-coms --name dev`, and `pi-coms-claude --name claude`.
 
 ## Upload/update GitHub
 

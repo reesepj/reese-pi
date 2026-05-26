@@ -36,9 +36,9 @@ After install, these wrappers are symlinked into `~/.local/bin`:
 ```bash
 pi-verifier                    # launch builder + verifier loop
 pi-local-coms --name planner   # same-machine Pi-to-Pi agent
-pi-coms-net-server             # HTTP/SSE Pi-to-Pi hub
-pi-coms --name dev             # networked Pi-to-Pi client
-pi-coms-claude --name claude   # networked Claude-backed Pi agent
+pi-hub                         # HTTP/SSE Pi-to-Pi hub
+pi-client dev                  # networked Pi-to-Pi client
+pi-client-claude claude        # networked Claude-backed Pi agent
 pi-browser-harness-chrome      # isolated Chrome profile for browser-harness
 ```
 
@@ -47,9 +47,9 @@ Repo-local equivalents:
 ```bash
 just v
 just local-coms --name planner
-just coms-net-server
-just coms --name dev
-just coms-claude --name claude
+just hub
+just client dev
+just client-claude claude
 just browser-harness-chrome
 just doctor                    # run workstation health checks
 ```
