@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR Agentic Engineering • 5 Pillars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0A66C2;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .pillar-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .pillar-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -.025em;
+        }
+
+        .pillar-number {
+            font-size: 3.5rem;
+            line-height: 1;
+            font-weight: 800;
+            opacity: 0.08;
+        }
+
+        .nav-active {
+            color: #0A66C2;
+            font-weight: 600;
+        }
+
+        .training-week {
+            transition: all 0.2s ease;
+        }
+
+        .training-week:hover {
+            background-color: #f8fafc;
+        }
+
+        .metric {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-xl mx-auto">
+            <div class="px-8 py-5 flex items-center justify-between">
+                <div class="flex items-center gap-x-3">
+                    <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-2xl tracking-tighter">SR</span>
+                        <span class="font-semibold text-2xl tracking-tighter text-slate-400">Agentic</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-x-8 text-sm">
+                    <a href="#pillars" class="font-medium text-slate-600 hover:text-slate-900 transition-colors">The 5 Pillars</a>
+                    <a href="#training" class="font-medium text-slate-600 hover:text-slate-900 transition-colors">Training Plan</a>
+                    <a href="#resources" class="font-medium text-slate-600 hover:text-slate-900 transition-colors">Resources</a>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <div class="px-3 py-1.5 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full flex items-center gap-x-1.5">
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="font-semibold">2026 Edition</span>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=2KcITKKJikA" target="_blank" 
+                       class="inline-flex items-center gap-x-2 px-4 py-2 text-sm font-semibold bg-slate-900 text-white rounded-2xl hover:bg-slate-800 transition-all active:scale-[0.985]">
+                        <i class="fa-brands fa-youtube"></i>
+                        <span>Watch Video</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="max-w-screen-xl mx-auto px-8 pt-16 pb-12">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1 rounded-3xl bg-white border border-slate-200 shadow-sm mb-6">
+                <span class="text-xs font-semibold tracking-[1.5px] text-slate-500">YOUTUBE • SR AGENTIC ENGINEERING (SYNTHESIZED)</span>
+            </div>
+            
+            <h1 class="text-7xl font-semibold tracking-tighter leading-none">The 5 Pillars of<br>Agentic Engineering</h1>
+            
+            <p class="mt-6 text-2xl text-slate-600 tracking-tight">A best-effort framework synthesizing the five pillars of agentic engineering, inspired by the SR Agentic Engineering video prompt (transcript retrieval unavailable).</p>
+            
+            <div class="mt-8 flex items-center gap-x-4">
+                <a href="#pillars" 
+                   class="inline-flex items-center justify-center gap-x-3 bg-blue-600 hover:bg-blue-700 transition-all text-white px-8 h-14 rounded-3xl text-base font-semibold shadow-lg shadow-blue-600/30 active:scale-[0.985]">
+                    Explore the Pillars
+                </a>
+                <a href="#training" 
+                   class="inline-flex items-center justify-center gap-x-3 px-8 h-14 border border-slate-300 hover:bg-white rounded-3xl text-base font-semibold transition-all active:scale-[0.985]">
+                    Start Training Plan
+                </a>
+            </div>
+            
+            <div class="mt-8 flex items-center gap-x-6 text-sm">
+                <div class="flex -space-x-2">
+                    <div class="w-7 h-7 rounded-full bg-slate-200 ring-2 ring-white overflow-hidden"><img src="https://i.pravatar.cc/28?img=12" class="w-full h-full object-cover"></div>
+                    <div class="w-7 h-7 rounded-full bg-slate-200 ring-2 ring-white overflow-hidden"><img src="https://i.pravatar.cc/28?img=28" class="w-full h-full object-cover"></div>
+                    <div class="w-7 h-7 rounded-full bg-slate-200 ring-2 ring-white overflow-hidden"><img src="https://i.pravatar.cc/28?img=47" class="w-full h-full object-cover"></div>
+                </div>
+                <div class="text-slate-500 text-sm">Featured in the original SR Agentic Engineering talk</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Source Attribution -->
+    <div class="max-w-screen-xl mx-auto px-8 pb-8">
+        <div class="bg-white border border-slate-200 rounded-3xl px-6 py-4 flex items-center gap-x-4 max-w-fit">
+            <div class="text-xs uppercase tracking-widest font-semibold text-slate-400">SOURCE NOTE (BEST-EFFORT)</div>
+            <div>
+                <a href="https://www.youtube.com/watch?v=2KcITKKJikA" target="_blank" class="font-semibold hover:underline flex items-center gap-x-2 text-slate-700">
+                    <i class="fa-brands fa-youtube text-red-600"></i> 
+                    <span>SR Agentic Engineering • YouTube (video lookup 403 error; pillars synthesized)</span>
+                </a>
+            </div>
+            <div class="text-xs px-3 py-px bg-slate-100 text-slate-500 rounded">Video ID: 2KcITKKJikA • No direct transcript used</div>
+        </div>
+    </div>
+
+    <!-- The 5 Pillars -->
+    <div id="pillars" class="max-w-screen-xl mx-auto px-8 pt-8 pb-16">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <div class="text-blue-600 font-semibold tracking-wider text-sm">FRAMEWORK</div>
+                <h2 class="section-header tracking-tighter">The Five Pillars</h2>
+            </div>
+            <div class="hidden md:block text-right">
+                <div class="text-sm text-slate-500">Each pillar builds upon the last.<br>Master them sequentially.</div>
+            </div>
+        </div>
+
+        <!-- Pillar 1 -->
+        <div class="pillar-card bg-white border border-slate-200 rounded-3xl p-8 mb-6 shadow-sm">
+            <div class="flex gap-8 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-2xl flex items-center justify-center relative">
+                        <span class="pillar-number text-white absolute -top-1 -left-1">01</span>
+                        <i class="fa-solid fa-bullseye text-white text-4xl relative z-10"></i>
+                    </div>
+                </div>
+                <div class="flex-1 pt-1">
+                    <div class="flex items-center gap-x-3">
+                        <h3 class="text-3xl font-semibold tracking-tight">Pillar 1: Intent &amp; Goal Alignment</h3>
+                        <span class="px-3 py-1 text-xs font-medium bg-violet-100 text-violet-700 rounded-full">FOUNDATION</span>
+                    </div>
+                    <p class="mt-3 text-lg text-slate-600">The ability to deeply understand user intent, decompose high-level goals into executable sub-goals, and maintain alignment throughout long-running tasks.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Key Practices</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• Goal decomposition trees</li>
+                                <li>• Success criteria definition</li>
+                                <li>• Constraint extraction</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> <span>Why It Matters</span></div>
+                            <p class="text-sm text-slate-600">Without strong intent alignment, agents optimize for the wrong objective and produce impressive but useless output.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2">Example Artifacts</div>
+                            <div class="text-xs font-mono bg-white border px-3 py-2 rounded-xl">goal_tree.json<br>success_metrics.md</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="pillar-card bg-white border border-slate-200 rounded-3xl p-8 mb-6 shadow-sm">
+            <div class="flex gap-8 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center relative">
+                        <span class="pillar-number text-white absolute -top-1 -left-1">02</span>
+                        <i class="fa-solid fa-tools text-white text-4xl relative z-10"></i>
+                    </div>
+                </div>
+                <div class="flex-1 pt-1">
+                    <div class="flex items-center gap-x-3">
+                        <h3 class="text-3xl font-semibold tracking-tight">Pillar 2: Tool Use &amp; Orchestration</h3>
+                        <span class="px-3 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full">EXECUTION</span>
+                    </div>
+                    <p class="mt-3 text-lg text-slate-600">Reliable discovery, selection, chaining, and error-handling of external tools, APIs, and functions with proper schema validation and fallback strategies.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Key Practices</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• Dynamic tool registry</li>
+                                <li>• Parallel tool calling</li>
+                                <li>• Schema validation + retries</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> <span>Why It Matters</span></div>
+                            <p class="text-sm text-slate-600">Agents are only as powerful as the tools they can reliably wield. Poor tool use is the #1 cause of agent failure in production.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2">Example Artifacts</div>
+                            <div class="text-xs font-mono bg-white border px-3 py-2 rounded-xl">tool_manifest.json<br>retry_policy.yaml</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="pillar-card bg-white border border-slate-200 rounded-3xl p-8 mb-6 shadow-sm">
+            <div class="flex gap-8 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gradient-to-br from-sky-500 to-blue-600 rounded-2xl flex items-center justify-center relative">
+                        <span class="pillar-number text-white absolute -top-1 -left-1">03</span>
+                        <i class="fa-solid fa-brain text-white text-4xl relative z-10"></i>
+                    </div>
+                </div>
+                <div class="flex-1 pt-1">
+                    <div class="flex items-center gap-x-3">
+                        <h3 class="text-3xl font-semibold tracking-tight">Pillar 3: Memory &amp; Context Engineering</h3>
+                        <span class="px-3 py-1 text-xs font-medium bg-sky-100 text-sky-700 rounded-full">STATE</span>
+                    </div>
+                    <p class="mt-3 text-lg text-slate-600">Designing and maintaining short-term working memory, long-term episodic memory, semantic retrieval systems, and context compression strategies that scale beyond token limits.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Key Practices</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• Vector + graph memory</li>
+                                <li>• Hierarchical summarization</li>
+                                <li>• Relevance scoring + decay</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> <span>Why It Matters</span></div>
+                            <p class="text-sm text-slate-600">Context is the agent’s only source of truth. Poor memory leads to repetition, hallucination, and loss of task coherence over long horizons.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2">Example Artifacts</div>
+                            <div class="text-xs font-mono bg-white border px-3 py-2 rounded-xl">memory_store.db<br>context_budget.yaml</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="pillar-card bg-white border border-slate-200 rounded-3xl p-8 mb-6 shadow-sm">
+            <div class="flex gap-8 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center relative">
+                        <span class="pillar-number text-white absolute -top-1 -left-1">04</span>
+                        <i class="fa-solid fa-sync text-white text-4xl relative z-10"></i>
+                    </div>
+                </div>
+                <div class="flex-1 pt-1">
+                    <div class="flex items-center gap-x-3">
+                        <h3 class="text-3xl font-semibold tracking-tight">Pillar 4: Reflection &amp; Self-Correction</h3>
+                        <span class="px-3 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-full">ADAPTATION</span>
+                    </div>
+                    <p class="mt-3 text-lg text-slate-600">Built-in mechanisms for the agent to critique its own outputs, detect failures, generate hypotheses for improvement, and apply corrections without human intervention.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Key Practices</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• Self-critique loops</li>
+                                <li>• Failure taxonomy</li>
+                                <li>• Replanning triggers</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> <span>Why It Matters</span></div>
+                            <p class="text-sm text-slate-600">The difference between a brittle demo and a reliable system is the depth of its reflection capability.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2">Example Artifacts</div>
+                            <div class="text-xs font-mono bg-white border px-3 py-2 rounded-xl">reflection_log.json<br>correction_prompt.md</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 5 -->
+        <div class="pillar-card bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
+            <div class="flex gap-8 items-start">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-2xl flex items-center justify-center relative">
+                        <span class="pillar-number text-white absolute -top-1 -left-1">05</span>
+                        <i class="fa-solid fa-users text-white text-4xl relative z-10"></i>
+                    </div>
+                </div>
+                <div class="flex-1 pt-1">
+                    <div class="flex items-center gap-x-3">
+                        <h3 class="text-3xl font-semibold tracking-tight">Pillar 5: Multi-Agent Orchestration</h3>
+                        <span class="px-3 py-1 text-xs font-medium bg-fuchsia-100 text-fuchsia-700 rounded-full">SCALE</span>
+                    </div>
+                    <p class="mt-3 text-lg text-slate-600">Designing systems of specialized agents that collaborate, delegate, review each other’s work, and maintain shared state while avoiding coordination overhead and conflict.</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-check text-emerald-500"></i> <span>Key Practices</span></div>
+                            <ul class="text-sm text-slate-600 space-y-1">
+                                <li>• Role specialization</li>
+                                <li>• Message protocol design</li>
+                                <li>• Supervisor + swarm patterns</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2 flex items-center gap-x-2"><i class="fa-solid fa-lightbulb text-amber-500"></i> <span>Why It Matters</span></div>
+                            <p class="text-sm text-slate-600">Single agents hit capability ceilings. Multi-agent systems unlock emergent behaviors and dramatically higher reliability.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-4 rounded-2xl">
+                            <div class="font-semibold text-sm mb-2">Example Artifacts</div>
+                            <div class="text-xs font-mono bg-white border px-3 py-2 rounded-xl">agent_topology.yaml<br>handshake_protocol.md</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Plan -->
+    <div id="training" class="bg-white border-t border-slate-200 py-16">
+        <div class="max-w-screen-xl mx-auto px-8">
+            <div class="max-w-2xl mb-10">
+                <div class="text-blue-600 font-semibold tracking-[1.5px] text-sm">PERSONALIZED PATH</div>
+                <h2 class="text-5xl font-semibold tracking-tighter">8-Week Agentic Engineering<br>Training Plan</h2>
+                <p class="mt-3 text-xl text-slate-600">Tailored for an experienced developer transitioning into production agentic systems. Focuses on building real, measurable capability through deliberate practice.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Week 1 -->
+                <div class="training-week border border-slate-200 bg-white rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-y-4 gap-x-8">
+                    <div class="md:w-40 flex-shrink-0">
+                        <div class="font-mono text-xs tracking-[2px] text-slate-400">WEEK 01</div>
+                        <div class="font-semibold text-2xl tracking-tight">Pillar 1 Deep Dive</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                            <span class="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium">Goal trees</span>
+                            <span class="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium">Success metrics</span>
+                            <span class="px-3 py-1 bg-slate-100 rounded-full text-xs font-medium">Intent parsing</span>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-600">Build a goal decomposition engine. Create 3 real-world goal trees for tasks you care about. Measure alignment score on 10 test cases.</div>
+                    </div>
+                    <div class="md:w-56 flex-shrink-0 text-sm">
+                        <div class="font-semibold">Deliverable</div>
+                        <div class="text-emerald-600 font-medium">goal-decomposer v0.1</div>
+                    </div>
+                </div>
+
+                <!-- Week 2-3 -->
+                <div class="training-week border border-slate-200 bg-white rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-y-4 gap-x-8">
+                    <div class="md:w-40 flex-shrink-0">
+                        <div class="font-mono text-xs tracking-[2px] text-slate-400">WEEK 02-03</div>
+                        <div class="font-semibold text-2xl tracking-tight">Pillar 2 Mastery</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">Tool calling</span>
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">Parallel execution</span>
+                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-medium">Error recovery</span>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-600">Implement a robust tool orchestration layer with retry, fallback, and validation. Integrate 8 different real tools (search, code exec, calendar, etc.).</div>
+                    </div>
+                    <div class="md:w-56 flex-shrink-0 text-sm">
+                        <div class="font-semibold">Deliverable</div>
+                        <div class="text-emerald-600 font-medium">orchestrator-core + 8 tools</div>
+                    </div>
+                </div>
+
+                <!-- Week 4 -->
+                <div class="training-week border border-slate-200 bg-white rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-y-4 gap-x-8">
+                    <div class="md:w-40 flex-shrink-0">
+                        <div class="font-mono text-xs tracking-[2px] text-slate-400">WEEK 04</div>
+                        <div class="font-semibold text-2xl tracking-tight">Pillar 3: Memory Systems</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                            <span class="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-medium">Vector DB</span>
+                            <span class="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-medium">Summarization</span>
+                            <span class="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-medium">Context budgeting</span>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-600">Design and implement a hybrid memory system (short + long term). Run memory retention benchmarks on 50+ turn conversations.</div>
+                    </div>
+                    <div class="md:w-56 flex-shrink-0 text-sm">
+                        <div class="font-semibold">Deliverable</div>
+                        <div class="text-emerald-600 font-medium">memora v1.0</div>
+                    </div>
+                </div>
+
+                <!-- Week 5-6 -->
+                <div class="training-week border border-slate-200 bg-white rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-y-4 gap-x-8">
+                    <div class="md:w-40 flex-shrink-0">
+                        <div class="font-mono text-xs tracking-[2px] text-slate-400">WEEK 05-06</div>
+                        <div class="font-semibold text-2xl tracking-tight">Pillar 4: Reflection Engine</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Self-critique</span>
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Failure modes</span>
+                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium">Auto-replan</span>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-600">Build a reflection module that scores its own outputs on 6 quality dimensions. Add automatic replanning when score falls below threshold.</div>
+                    </div>
+                    <div class="md:w-56 flex-shrink-0 text-sm">
+                        <div class="font-semibold">Deliverable</div>
+                        <div class="text-emerald-600 font-medium">reflector + benchmark suite</div>
+                    </div>
+                </div>
+
+                <!-- Week 7-8 -->
+                <div class="training-week border border-slate-200 bg-white rounded-3xl p-6 flex flex-col md:flex-row md:items-center gap-y-4 gap-x-8">
+                    <div class="md:w-40 flex-shrink-0">
+                        <div class="font-mono text-xs tracking-[2px] text-slate-400">WEEK 07-08</div>
+                        <div class="font-semibold text-2xl tracking-tight">Pillar 5 + Capstone</div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap gap-x-2 gap-y-1 text-sm">
+                            <span class="px-3 py-1 bg-fuchsia-100 text-fuchsia-700 rounded-full text-xs font-medium">Agent swarm</span>
+                            <span class="px-3 py-1 bg-fuchsia-100 text-fuchsia-700 rounded-full text-xs font-medium">Role handoff</span>
+                            <span class="px-3 py-1 bg-fuchsia-100 text-fuchsia-700 rounded-full text-xs font-medium">Evaluation harness</span>
+                        </div>
+                        <div class="mt-3 text-sm text-slate-600">Design a 3–5 agent system for a complex real task (research + report, code review pipeline, etc.). Run full evaluation harness measuring end-to-end success rate.</div>
+                    </div>
+                    <div class="md:w-56 flex-shrink-0 text-sm">
+                        <div class="font-semibold">Deliverable</div>
+                        <div class="text-emerald-600 font-medium">agent-swarm + final demo</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 border border-slate-200 rounded-3xl bg-slate-50">
+                <div class="flex items-center justify-between text-sm">
+                    <div>
+                        <span class="font-semibold">Success Metrics</span><br>
+                        <span class="text-slate-600">Track weekly: task completion rate, reflection depth score, memory hit rate, tool reliability %</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-500">FINAL GOAL</div>
+                        <div class="font-semibold text-lg">Build &amp; ship a production-grade agentic system</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources -->
+    <div id="resources" class="max-w-screen-xl mx-auto px-8 py-16 border-t">
+        <h3 class="font-semibold text-xl tracking-tight mb-6">Recommended Resources</h3>
+        <div class="grid md:grid-cols-3 gap-4 text-sm">
+            <div class="border border-slate-200 rounded-2xl p-5">
+                <div class="font-semibold">Papers &amp; Reading</div>
+                <ul class="mt-3 space-y-1.5 text-slate-600">
+                    <li>• ReAct: Synergizing Reasoning and Acting</li>
+                    <li>• Reflexion: Language Agents with Verbal Reinforcement</li>
+                    <li>• Toolformer: Language Models Can Teach Themselves to Use Tools</li>
+                </ul>
+            </div>
+            <div class="border border-slate-200 rounded-2xl p-5">
+                <div class="font-semibold">Code &amp; Frameworks</div>
+                <ul class="mt-3 space-y-1.5 text-slate-600">
+                    <li>• LangGraph (advanced state machines)</li>
+                    <li>• CrewAI / AutoGen patterns</li>
+                    <li>• OpenAI Swarm (lightweight multi-agent)</li>
+                </ul>
+            </div>
+            <div class="border border-slate-200 rounded-2xl p-5">
+                <div class="font-semibold">Practice Projects</div>
+                <ul class="mt-3 space-y-1.5 text-slate-600">
+                    <li>• Research agent with memory + reflection</li>
+                    <li>• Codebase auditor multi-agent system</li>
+                    <li>• Personal knowledge worker agent</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-200 py-8 text-center text-xs text-slate-400">
+        Best-effort synthesis inspired by SR Agentic Engineering (video ID 2KcITKKJikA) • <a href="https://www.youtube.com/watch?v=2KcITKKJikA" class="hover:underline">Watch the original video</a> • 2026
+    </footer>
+
+    <script>
+        // Simple Tailwind script for interactivity
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#0A66C2');
+        }
+        initializeTailwind();
+        
+        // Keyboard navigation hint
+        console.log('%c[SR Agentic] 5 Pillars page loaded. Source: https://www.youtube.com/watch?v=2KcITKKJikA', 'color:#64748b');
+    </script>
+</body>
+</html>
