@@ -1,6 +1,7 @@
 {
   "skills": [
-    "~/.claude/skills"
+    "~/.claude/skills",
+    "!~/.claude/skills/seo*"
   ],
   "sessionDir": "~/.pi/agent/sessions",
   "defaultProvider": "pi-claude-cli",

@@ -38,7 +38,8 @@ The installer will:
 4. Symlink Browser Harness into `~/.claude/skills/browser-harness` when Claude Code skills are available.
 5. Create `.env` from `.env.sample` if needed.
 6. Install global launch wrappers into `~/.local/bin`.
-7. Auto-load `extensions/gbrain-context.ts` from `.pi/settings.json` and use `.mcp.json` to expose `gbrain serve` through `pi-mcp-adapter` when `gbrain` is installed.
+7. Keep default skill loading lighter by excluding `~/.claude/skills/seo*`; use `pi-seo` / `just seo` for SEO-heavy work.
+8. Auto-load `extensions/gbrain-context.ts` from `.pi/settings.json` and use `.mcp.json` to expose `gbrain serve` through `pi-mcp-adapter` when `gbrain` is installed.
 
 ## After install
 
@@ -81,6 +82,7 @@ Launch commands replicated by the installer:
 | `pi-hub` | `just hub` |
 | `pi-client dev` | `just client dev` |
 | `pi-client-claude claude` | `just client-claude claude` |
+| `pi-seo` | `just seo` |
 | `pi-browser-harness-chrome` | `just browser-harness-chrome` |
 
 Old commands still work: `pi-coms-net-server`, `pi-coms --name dev`, and `pi-coms-claude --name claude`.

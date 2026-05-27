@@ -39,6 +39,7 @@ pi-local-coms --name planner   # same-machine Pi-to-Pi agent
 pi-hub                         # HTTP/SSE Pi-to-Pi hub
 pi-client dev                  # networked Pi-to-Pi client
 pi-client-claude claude        # networked Claude-backed Pi agent
+pi-seo                         # opt-in SEO-heavy skill profile
 pi-browser-harness-chrome      # isolated Chrome profile for browser-harness
 ```
 
@@ -50,8 +51,21 @@ just local-coms --name planner
 just hub
 just client dev
 just client-claude claude
+just seo
 just browser-harness-chrome
 just doctor                    # run workstation health checks
+```
+
+## Skill profiles
+
+Default launches load the normal skill set but exclude the heavy `~/.claude/skills/seo*` catalog to keep startup/context lighter.
+
+Use the SEO profile only when needed:
+
+```bash
+pi-seo
+# or
+just seo
 ```
 
 ## Browser Harness web tool

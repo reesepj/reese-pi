@@ -59,6 +59,10 @@ doctor:
 typecheck-all:
     npm run typecheck:all
 
+# SEO-heavy profile: opt into the full ~/.claude/skills/seo* suite only when needed.
+seo *args:
+    bash scripts/pi-seo.sh {{args}}
+
 # Start a local Pi-to-Pi hub (short form: `just hub`).
 hub:
     -lsof -ti :${PI_COMS_NET_PORT:-52965} | xargs -r kill -TERM 2>/dev/null

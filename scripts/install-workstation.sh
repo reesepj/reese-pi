@@ -116,7 +116,7 @@ fi
 
 echo "==> Installing launch command wrappers"
 mkdir -p "$HOME/.local/bin"
-for cmd in pi-verifier pi-local-coms pi-hub pi-hub-lan pi-client pi-client-claude pi-coms-net-server pi-coms pi-coms-claude pi-browser-harness-chrome; do
+for cmd in pi-verifier pi-local-coms pi-hub pi-hub-lan pi-client pi-client-claude pi-seo pi-coms-net-server pi-coms pi-coms-claude pi-browser-harness-chrome; do
   ln -sf "$ROOT/scripts/bin/$cmd" "$HOME/.local/bin/$cmd"
 done
 
