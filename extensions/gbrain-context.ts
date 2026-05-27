@@ -164,8 +164,7 @@ export default function gbrainContextExtension(pi: ExtensionAPI): void {
 		description: "Fetch concise operating context or lookup memory from local gbrain. Modes: brief, stats, list, get, search, query.",
 		promptSnippet: "Fetch current operating context, paused lanes, active priorities, or relevant memory from gbrain.",
 		promptGuidelines: [
-			"Use gbrain_context before acting on current priorities, paused work lanes, project history, or ambiguous remote-ops requests where durable memory may matter.",
-			"Do not treat gbrain_context output as fresh truth until it has been fetched in the current turn when the answer depends on current operating state.",
+			"Use only when durable current-state, project history, or memory lookup matters; keep summaries concise.",
 		],
 		parameters: Type.Object({
 			mode: Type.Optional(Type.String({ description: "brief | stats | list | get | search | query. Default: brief." })),
@@ -200,7 +199,7 @@ export default function gbrainContextExtension(pi: ExtensionAPI): void {
 	});
 
 	pi.on("before_agent_start", async (event) => ({
-		systemPrompt: `${event.systemPrompt}\n\nGBrain is available through the gbrain_context tool for durable operating context. Use it when current priorities, paused lanes, project history, or ReeseBrain/gbrain memory could affect the answer. Keep fetched gbrain summaries concise in user replies.`,
+		systemPrompt: `${event.systemPrompt}\n\nUse gbrain_context only when durable project/memory context matters; keep fetched summaries concise.`,
 	}));
 
 	console.log("✅ gbrain-context extension loaded — gbrain_context tool + /gbrain-context command active");

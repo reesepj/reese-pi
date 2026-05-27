@@ -4,7 +4,7 @@
 
 # Reese Pi
 
-A reproducible Pi Agent workstation: verifier loop, Claude Code routing, Pi-to-Pi agent communication, Browser Harness web control, memory/todo/question tools, Telegram integration, and Plannotator — all wired behind one install script.
+A reproducible Pi Agent workstation: verifier loop, Claude Code routing, Pi-to-Pi agent communication, Browser Harness web control, memory/todo/question tools, and Telegram integration — all wired behind one install script.
 
 This repo is designed so a fresh machine can clone once, run one script, and get the same launch commands and project Pi package setup as this workstation.
 
@@ -25,7 +25,6 @@ The installer pins and installs the current package set from this workstation:
 - `@juicesharp/rpiv-ask-user-question`
 - `@juicesharp/rpiv-todo`
 - `@llblab/pi-telegram`
-- `@plannotator/pi-extension`
 - Browser Harness from `browser-use/browser-harness`
 - local Pi-to-Pi communication extensions from `pi-vs-claude-code`
 
@@ -34,6 +33,8 @@ The installer pins and installs the current package set from this workstation:
 After install, these wrappers are symlinked into `~/.local/bin`:
 
 ```bash
+pi-lite                        # lean everyday profile
+pi-full                        # full default project profile
 pi-verifier                    # launch builder + verifier loop
 pi-local-coms --name planner   # same-machine Pi-to-Pi agent
 pi-hub                         # HTTP/SSE Pi-to-Pi hub
@@ -46,6 +47,8 @@ pi-browser-harness-chrome      # isolated Chrome profile for browser-harness
 Repo-local equivalents:
 
 ```bash
+just lite
+just full
 just v
 just local-coms --name planner
 just hub
@@ -58,15 +61,25 @@ just doctor                    # run workstation health checks
 
 ## Skill profiles
 
-Default launches load the normal skill set but exclude the heavy `~/.claude/skills/seo*` catalog to keep startup/context lighter.
+Default launches now use medium thinking and exclude the heavy `~/.claude/skills/seo*` catalog. Plannotator and SEO stay out of the default package/tool set.
 
-Use the SEO profile only when needed:
+Profiles:
 
 ```bash
-pi-seo
-# or
+pi-lite   # no skills/prompts/context files; daily tools only
+pi-full   # default project setup, minus SEO skills
+pi-seo    # opt-in SEO-heavy skill suite
+```
+
+Repo-local equivalents:
+
+```bash
+just lite
+just full
 just seo
 ```
+
+Session hygiene: start a fresh session for unrelated work, and use `/compact` after large implementation chunks or before topic shifts.
 
 ## Browser Harness web tool
 

@@ -33,7 +33,6 @@ The installer will:
    - `npm:@juicesharp/rpiv-ask-user-question@1.9.0`
    - `npm:@juicesharp/rpiv-todo@1.9.0`
    - `npm:@llblab/pi-telegram@0.11.2`
-   - `npm:@plannotator/pi-extension@0.19.18`
 3. Clone and install Browser Harness into `.pi/vendor/browser-harness` with `uv tool install -e .`.
 4. Symlink Browser Harness into `~/.claude/skills/browser-harness` when Claude Code skills are available.
 5. Create `.env` from `.env.sample` if needed.
@@ -77,6 +76,8 @@ Launch commands replicated by the installer:
 
 | Command | Equivalent repo recipe |
 | --- | --- |
+| `pi-lite` | `just lite` |
+| `pi-full` | `just full` |
 | `pi-verifier` | `just v` |
 | `pi-local-coms --name planner` | `just local-coms --name planner` |
 | `pi-hub` | `just hub` |
@@ -86,6 +87,8 @@ Launch commands replicated by the installer:
 | `pi-browser-harness-chrome` | `just browser-harness-chrome` |
 
 Old commands still work: `pi-coms-net-server`, `pi-coms --name dev`, and `pi-coms-claude --name claude`.
+
+For lighter long-running work: prefer `pi-lite`, start fresh sessions for unrelated topics, and run `/compact` after large chunks or before topic shifts.
 
 ## Upload/update GitHub
 

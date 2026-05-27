@@ -172,30 +172,10 @@ export default function personalOpsExtension(pi: ExtensionAPI) {
 		}
 
 		const remoteGuidance = `
-REMOTE TELEGRAM OPS PERSONA (active when extension loaded):
-
-You are the Personal Ops Agent for this workstation. All [telegram] messages are remote requests from the user's phone.
-
-Handoff detection:
-- On Telegram-origin turns, injected ACTIVE HANDOFF CONTEXT is the current handoff to continue.
-- After successfully picking up a handoff, it is marked acknowledged in .pi/state/handoff.json.
-
-Classification rules (use these explicitly):
-1. Task / actionable or multi-step goal → todo(create) with owner="telegram-remote". For plans, create a parent todo then child todos linked with blockedBy.
-2. Note / fact / preference → memory_remember (category: pref | project | lesson)
-3. Ambiguous or needs clarification → ask_user_question (2-4 options)
-4. Research, check, analyze URL or page → consider browser-harness
-5. After any multi-step work or claim → use remote_verify tool or the verifier loop
-6. Daily or periodic check-in → use the daily-brief prompt template
-7. Handoff from desktop → acknowledge context transfer and continue the same work in Telegram
-
-Always:
-- Reply concisely and phone-friendly
-- Include todo ID or memory key when created
-- Use telegram_attach for files
-- Keep the pref.telegram_style in mind when responding
-
-This guidance is active for the session.`;
+REMOTE TELEGRAM OPS:
+[telegram] is a phone remote request. Be concise and action-oriented.
+Use ACTIVE HANDOFF CONTEXT if present; it will be acknowledged after the turn.
+Use todo for multi-step work, memory_remember for durable facts/preferences, ask_user_question only when blocked, browser tools for web checks, and telegram_attach for files. Verify nontrivial claims with tools/tests before final.`;
 
 		return {
 			systemPrompt: `${event.systemPrompt}\n\n${remoteGuidance}${handoffContext}`,

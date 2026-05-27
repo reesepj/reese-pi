@@ -59,6 +59,14 @@ doctor:
 typecheck-all:
     npm run typecheck:all
 
+# Minimal everyday profile: no skills/prompts/context files, daily-use tools only.
+lite *args:
+    bash scripts/pi-lite.sh {{args}}
+
+# Full default project profile. SEO stays opt-in via `just seo`.
+full *args:
+    bash scripts/pi-full.sh {{args}}
+
 # SEO-heavy profile: opt into the full ~/.claude/skills/seo* suite only when needed.
 seo *args:
     bash scripts/pi-seo.sh {{args}}

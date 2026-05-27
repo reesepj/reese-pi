@@ -66,7 +66,6 @@ packages=(
   "npm:@juicesharp/rpiv-ask-user-question@1.9.0"
   "npm:@juicesharp/rpiv-todo@1.9.0"
   "npm:@llblab/pi-telegram@0.11.2"
-  "npm:@plannotator/pi-extension@0.19.18"
 )
 
 for pkg in "${packages[@]}"; do
@@ -116,7 +115,7 @@ fi
 
 echo "==> Installing launch command wrappers"
 mkdir -p "$HOME/.local/bin"
-for cmd in pi-verifier pi-local-coms pi-hub pi-hub-lan pi-client pi-client-claude pi-seo pi-coms-net-server pi-coms pi-coms-claude pi-browser-harness-chrome; do
+for cmd in pi-verifier pi-lite pi-full pi-local-coms pi-hub pi-hub-lan pi-client pi-client-claude pi-seo pi-coms-net-server pi-coms pi-coms-claude pi-browser-harness-chrome; do
   ln -sf "$ROOT/scripts/bin/$cmd" "$HOME/.local/bin/$cmd"
 done
 
