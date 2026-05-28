@@ -47,7 +47,7 @@ for cmd in git npm pi uv tmux; do
 done
 
 printf '\n==> Optional commands\n'
-for cmd in just bun browser-harness gbrain; do
+for cmd in just bun browser-harness; do
   if command -v "$cmd" >/dev/null 2>&1; then
     ok "$cmd: $(command -v "$cmd")"
   else
@@ -98,38 +98,6 @@ fi
 
 if command -v browser-harness >/dev/null 2>&1; then
   run_optional "Browser Harness smoke" browser-harness navigate --url about:blank --headless
-fi
-
-printf '\n==> gbrain integration\n'
-if node -e 'const fs=require("fs"); const cfg=JSON.parse(fs.readFileSync(".pi/settings.json","utf8")); if (!cfg.extensions?.includes("../extensions/gbrain-context.ts")) process.exit(1);' >/dev/null 2>&1; then
-  ok "gbrain-context extension configured"
-else
-  warn "gbrain-context extension is not configured in .pi/settings.json"
-fi
-if [ -f .mcp.json ]; then
-  if node -e 'const fs=require("fs"); const cfg=JSON.parse(fs.readFileSync(".mcp.json","utf8")); if (!cfg.mcpServers?.gbrain) process.exit(1);' >/dev/null 2>&1; then
-    ok ".mcp.json declares gbrain MCP server"
-  else
-    warn ".mcp.json exists but does not declare mcpServers.gbrain"
-  fi
-else
-  warn ".mcp.json missing; gbrain MCP is not project-configured"
-fi
-if command -v gbrain >/dev/null 2>&1; then
-  GBRAIN_DOCTOR_JSON="$(gbrain doctor --fast --json 2>/dev/null || true)"
-  if [ -n "$GBRAIN_DOCTOR_JSON" ]; then
-    node -e 'const s=process.argv[1]; const d=JSON.parse(s); if (!["ok","warnings"].includes(d.status)) process.exit(1); console.log(`${d.status} health_score=${d.health_score ?? "n/a"}`);' "$GBRAIN_DOCTOR_JSON" >/tmp/gbrain-doctor-summary.$$ 2>/dev/null
-    if [ $? -eq 0 ]; then
-      ok "gbrain doctor: $(cat /tmp/gbrain-doctor-summary.$$)"
-    else
-      warn "gbrain doctor returned unhealthy status"
-    fi
-    rm -f /tmp/gbrain-doctor-summary.$$
-  else
-    warn "gbrain doctor did not return JSON"
-  fi
-else
-  warn "gbrain not on PATH; MCP server command will fail"
 fi
 
 printf '\n==> Git worktree\n'

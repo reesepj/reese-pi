@@ -12,7 +12,6 @@ Install these first:
 - `uv`
 - `just` recommended
 - Chrome or Chromium recommended for Browser Harness
-- `gbrain` recommended for the project-local MCP brain integration
 
 ## Install
 
@@ -38,7 +37,6 @@ The installer will:
 5. Create `.env` from `.env.sample` if needed.
 6. Install global launch wrappers into `~/.local/bin`.
 7. Keep default skill loading lighter by excluding `~/.claude/skills/seo*`; use `pi-seo` / `just seo` for SEO-heavy work.
-8. Auto-load `extensions/gbrain-context.ts` from `.pi/settings.json` and use `.mcp.json` to expose `gbrain serve` through `pi-mcp-adapter` when `gbrain` is installed.
 
 ## After install
 
